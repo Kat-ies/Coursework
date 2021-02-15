@@ -1,3 +1,9 @@
+"""
+functions:
+show_wider_face_dataset(images_dict, frames_dict)
+show_faces_dataset(faces_dataset)
+"""
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from collections import namedtuple
@@ -5,8 +11,6 @@ import random
 import numpy as np
 from PIL import ImageDraw
 
-# function show_wider_face_dataset shows some visual examples from original dataset
-# for making sure, that data was correctly downloaded and marked
 
 COLUMNS = 1
 ROWS = 5
@@ -14,6 +18,11 @@ RANDOM_SEED = 42
 
 
 def show_wider_face_dataset(images_dict, frames_dict):
+    """
+    function show_wider_face_dataset
+    shows some visual examples from original dataset
+    for making sure, that data was correctly downloaded and marked
+    """
     fig = plt.figure(figsize=(30, 40))
 
     # ax enables access to manipulate each of subplots
@@ -43,11 +52,12 @@ COLS = 5
 Faces = namedtuple('Faces', 'img is_face filename rect')
 Rectangle = namedtuple('Rectangle', 'x y w h')
 
-# function show_faces_dataset shows some visual examples from new dataset
-# for making sure, that dataset creation was successful
-
 
 def show_faces_dataset(faces_dataset):
+    """
+    function show_faces_dataset shows some visual examples from new dataset
+    for making sure, that dataset creation was successful
+    """
     fig = plt.figure(figsize=(10, 15))
 
     # ax enables access to manipulate each of subplots

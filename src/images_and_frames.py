@@ -1,3 +1,9 @@
+"""
+functions:
+make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False)
+make_frames_dict(image_dict)
+"""
+
 import os
 from PIL import Image
 from collections import namedtuple
@@ -6,12 +12,12 @@ PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проек�
 IMG_PATH = 'WIDER_train/images'
 
 
-# function make_image_dict creates a fixed-size dictionary of images.
-# images are taken from IMG_PATH or from another path
-# dict_images = {'file_name' : PIL Image}
-
-
 def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
+    """
+    function make_image_dict creates a fixed-size dictionary of images.
+    images are taken from IMG_PATH or from another path
+    dict_images = {'file_name' : PIL Image}
+    """
     list_name = {}
     list_dirs = os.listdir(directory)
     list_dirs.sort()
@@ -29,27 +35,28 @@ def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
                 return list_name
 
 
-# function make_frames_dict creates a dictionary of frames.
-# each frame is a namedtuple
-# frames will be loaded only for files from image_dict,
-# other marked up data will be ignored
-# dict_frames = {'file_name' : Rectangle}
-
-# the format of txt input file:
-# File name
-# Number of bounding box
-# x1, y1, w, h, blur, expression, illumination,   invalid, occlusion, pose
-
-# the format for images without frames
-# File name
-# 0
-# 0 0 0 0 0 0 0 0 0 0
-
 # rectangle params
 Rectangle = namedtuple('Rectangle', 'x y w h')
 
 
 def make_frames_dict(image_dict):
+    """
+    function make_frames_dict creates a dictionary of frames.
+    each frame is a namedtuple
+    frames will be loaded only for files from image_dict,
+    other marked up data will be ignored
+    dict_frames = {'file_name' : Rectangle}
+
+    the format of txt input file:
+    File name
+    Number of bounding box
+    x1, y1, w, h, blur, expression, illumination,   invalid, occlusion, pose
+
+    the format for images without frames
+    File name
+    0
+    0 0 0 0 0 0 0 0 0 0
+    """
     dict_frames = {}  # dict of Rectangle
     # open file with information of marked up data
     with open(os.path.join(PATH, 'wider_face_train_bbx_gt.txt'), "r+") as file:
