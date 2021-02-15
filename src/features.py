@@ -6,7 +6,7 @@ import time
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from sklearn.externals import joblib
+import joblib
 import os
 import random
 
@@ -121,7 +121,8 @@ def save_data(all_features, x_train, x_test, y_test, y_train):
     joblib.dump(x_train, os.path.join(PATH, 'x_train.pkl'))
     joblib.dump(x_test, os.path.join(PATH, 'x_test.pkl'))
 
-#
+# function final_data_preprocessing is the most important function in features.py
+# it splits dataset, creates features and gives the output for the next stage
 
 
 def final_data_preprocessing(faces_dataset, time_df):
@@ -154,11 +155,16 @@ def final_data_preprocessing(faces_dataset, time_df):
     save_data(all_features, x_train, x_test, y_test, y_train)
 
 
-# время на создание фичей нам ещё пригодится, поэтому давайте пока сохраним куда-нибудь одну колонку
+# function save_time saves time for feature creation
+
+
 def save_time(time_df):
     time_of_features_creat = time_df[col_list[0]].values.tolist()
     joblib.dump(time_of_features_creat, os.path.join(PATH, 'time_of_features_creat.pkl'))
     joblib.dump(time_df, os.path.join(PATH, 'Dataframes', 'time_df_part0.pkl'))
+
+# function create_features_and_return_time is created to run
+# the process and show dataframe with time of feature creating to a user
 
 
 def create_features_and_return_time(faces_dataset):
