@@ -3,15 +3,8 @@ functions:
 dataset_create(images_dict, frames_dict)
 """
 
+from constants import *
 from PIL import Image
-from collections import namedtuple
-
-Faces = namedtuple('Faces', 'img is_face filename rect')
-Rectangle = namedtuple('Rectangle', 'x y w h')
-
-MAXSIZE = (25, 25)
-MINSIZE = (20, 20)
-random_box = (30, 30, 30, 30)
 
 
 def dataset_create(images_dict, frames_dict):
@@ -44,9 +37,9 @@ def dataset_create(images_dict, frames_dict):
         for rect in frames_dict[key]:
             if rect == (0, 0, 0, 0):
                 img_not_face = images_dict[key].crop(
-                    random_box).resize(MAXSIZE, Image.LANCZOS)
+                    RANDOM_BOX).resize(MAXSIZE, Image.LANCZOS)
                 faces.append(Faces(img_not_face, 0, key,
-                                   Rectangle(random_box[0], random_box[1], random_box[2], random_box[3])))
+                                   Rectangle(RANDOM_BOX[0], RANDOM_BOX[1], RANDOM_BOX[2], RANDOM_BOX[3])))
             elif (rect.w, rect.h) < MINSIZE:
                 continue
             else:

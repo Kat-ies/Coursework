@@ -14,7 +14,6 @@ HaarFeature
 
 from lxml import etree
 import sklearn.model_selection as sk
-from collections import namedtuple
 import pandas as pd
 import time
 import numpy as np
@@ -23,8 +22,7 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 import os
 import random
-
-MAXSIZE = (25, 25)
+from constants import *
 
 
 class HaarFeature:
@@ -62,10 +60,6 @@ class HaarFeature:
         return f_x
 
 
-PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
-HaarRect = namedtuple('HaarRect', 'x y w h weight')
-
-
 def parse_file():
     """
     function parse_file() reads an input .xml file
@@ -87,9 +81,6 @@ def parse_file():
 
                 h_features.append(HaarFeature(rectangles))
     return h_features
-
-
-RANDOM_SEED = 42
 
 
 def split_data(faces_dataset):
@@ -127,11 +118,6 @@ def feature_creating(sample, feature_type, h_features):
     return np.array(features)
 
 
-col_list = ['logreg_', 'tree_', 'knn_', 'svm_', 'randforest_', 'ada_boost_', 'grad_boost_']
-categories = ['hf_train', 'mf_train', 'pca_train', 'hf_test', 'mf_test', 'pca_test']
-PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
-
-
 def save_data(all_features, x_train, x_test, y_test, y_train, path=PATH):
     """
     function save_data(all_features, x_train, x_test, y_test, y_train, path=PATH)
@@ -159,7 +145,7 @@ def final_data_preprocessing(faces_dataset, time_df):
     pca = PCA(n_components=len(h_features))
     scaler = StandardScaler()
 
-    for i, f_samples in enumerate(categories):
+    for i, f_samples in enumerate(CATEGORIES):
         parsed_str = f_samples.split("_")
         if parsed_str[1] == 'train':
             index = 0
@@ -169,7 +155,7 @@ def final_data_preprocessing(faces_dataset, time_df):
         t0 = time.time()
         all_features.append(feature_creating(samples[index], parsed_str[0], h_features))
         t = time.time()
-        time_df.loc[categories[i]] = (t - t0) / len(samples[index])
+        time_df.loc[CATEGORIES[i]] = (t - t0) / len(samples[index])
 
     # scale new features
     for i in range(0, len(all_features) // 2 - 1):
@@ -186,7 +172,7 @@ def save_time(time_df, path=PATH):
     saves time for feature creation
     to the given path of to the default path
     """
-    time_of_features_creat = time_df[col_list[0]].values.tolist()
+    time_of_features_creat = time_df[COL_LIST[0]].values.tolist()
     joblib.dump(time_of_features_creat, os.path.join(path, 'time_of_features_creat.pkl'))
     joblib.dump(time_df, os.path.join(path, 'Dataframes', 'time_df_part0.pkl'))
 
@@ -197,7 +183,7 @@ def create_features_and_return_time(faces_dataset):
     is created to run the process and show dataframe
     with time of feature creating to a user
     """
-    time_df = pd.DataFrame(index=categories, columns=col_list)
+    time_df = pd.DataFrame(index=CATEGORIES, columns=COL_LIST)
     final_data_preprocessing(faces_dataset, time_df)
     save_time(time_df)
     return time_df
