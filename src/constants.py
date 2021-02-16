@@ -4,13 +4,22 @@ file with all useful constants
 Faces, Rectangle - used in • dataloader.py for correct data loading
                            • new_dataset_creation.py for making new dataset
                            • visualization.py for showing images from new dataset
+                           • images_and_frames.py to make frames
 
 HaarRect - used in • features.py for storing rectangles in haars features
 
-PATH - used in  • dataloader.py for loading features
+PATH - used in  • data_loader.py for loading features
                 • features.py for loading .xml file with
                 haars features and saving data
+                •images_and_frames.py for loading marked up file with frames
+                • data_saver.py for saving files
+
+IMG_PATH - used in  •images_and_frames.py as a root for loading
+                    unpacked wider face dataset
+
 DIRECTORIES - used in  • dataloader.py as a path with archive data
+
+FEATURES_LIST
 
 COL_LIST, CATEGORIES -used in  • features.py for creating time dataframe
 
@@ -33,7 +42,12 @@ COLUMNS_FOR_WF_DATASET, ROWS_FOR_WF_DATASET  - used in
 COLUMNS_FOR_NEW_DATASET, ROWS_NEW_WF_DATASET  - used in
                         • visualization.py for showing fix number of
                         new images in each row and column
+
+COLUMNS_FOR_WRONG_CLF_OBJ, ROWS_FOR_WRONG_CLF_OBJ - used in
+                        • visualization.py for showing fix number of
+                        new images in each row and column
 """
+
 from collections import namedtuple
 
 Faces = namedtuple('Faces', 'img is_face filename rect')
@@ -41,10 +55,12 @@ Rectangle = namedtuple('Rectangle', 'x y w h')
 HaarRect = namedtuple('HaarRect', 'x y w h weight')
 
 PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
+IMG_PATH = 'WIDER_train/images'
 
 DIRECTORIES = ['/content/drive/My Drive/КУ Курсачи/'
                'Курсовой проект 2020/WIDER_FACE (zip)/WIDER_train.zip']
 
+FEATURES_LIST = ['Haars features', 'Matrix features', 'Matrix + PCA features']
 COL_LIST = ['logreg_', 'tree_', 'knn_', 'svm_', 'randforest_', 'ada_boost_', 'grad_boost_']
 CATEGORIES = ['hf_train', 'mf_train', 'pca_train', 'hf_test', 'mf_test', 'pca_test']
 
@@ -59,3 +75,6 @@ ROWS_FOR_WF_DATASET = 5
 
 COLUMNS_FOR_NEW_DATASET = 5
 ROWS_FOR_NEW_DATASET = 5
+
+COLUMNS_FOR_WRONG_CLF_OBJ = 4
+ROWS_FOR_WRONG_CLF_OBJ = 24

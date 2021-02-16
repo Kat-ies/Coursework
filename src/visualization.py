@@ -2,6 +2,8 @@
 functions:
 show_wider_face_dataset(images_dict, frames_dict)
 show_faces_dataset(faces_dataset)
+plotting(dataframe, feature_type, index, col_list, fig, ax)
+show_wrong_classified_obj()
 """
 
 import matplotlib.pyplot as plt
@@ -10,11 +12,12 @@ import random
 import numpy as np
 from PIL import ImageDraw
 from constants import *
+from data_loader import load_sample, load_dataframe
 
 
 def show_wider_face_dataset(images_dict, frames_dict):
     """
-    function show_wider_face_dataset
+    function show_wider_face_dataset(images_dict, frames_dict)
     shows some visual examples from original dataset
     for making sure, that data was correctly downloaded and marked
     """
@@ -47,7 +50,8 @@ def show_wider_face_dataset(images_dict, frames_dict):
 
 def show_faces_dataset(faces_dataset):
     """
-    function show_faces_dataset shows some visual examples from new dataset
+    function show_faces_dataset(faces_dataset)
+    shows some visual examples from new dataset
     for making sure, that dataset creation was successful
     """
     fig = plt.figure(figsize=(10, 15))
@@ -70,3 +74,50 @@ def show_faces_dataset(faces_dataset):
         plt.imshow(image, cmap='gray', vmin=0, vmax=255)
 
     plt.show()  # finally, render the plot
+
+
+def plotting(dataframe, feature_type, index, col_list, fig, ax,  x_test):
+    """
+    function plotting(dataframe, feature_type, index, col_list, fig, ax)
+    is a support function for show_wrong_classified_obj()
+    """
+    for i in range(len(col_list)):
+        for j in range(COLUMNS_FOR_WRONG_CLF_OBJ):
+            rand_num = np.random.randint(0, len(dataframe))
+
+            while dataframe.iloc[rand_num][col_list[i]] == dataframe.iloc[rand_num]['y_test']:
+                rand_num = np.random.randint(0, len(dataframe))
+
+            image = x_test[rand_num].img
+            ax.append(fig.add_subplot(ROWS_FOR_WRONG_CLF_OBJ,
+                                      COLUMNS_FOR_WRONG_CLF_OBJ, index))
+            index += 1
+
+            if dataframe.iloc[rand_num]['y_test'] == 0:
+                ax[-1].set_title(feature_type + '; ' + col_list[i] + '; not a face')
+            else:
+                ax[-1].set_title(feature_type + '; ' + col_list[i] + '; isn\'t detected ')
+
+            plt.imshow(image, cmap='gray', vmin=0, vmax=255)
+
+
+def show_wrong_classified_obj():
+    """
+    function show_wrong_classified_obj() shows some examples
+    ml-models gave false positive or false negative detections
+    """
+    indexes = np.arange(1, 96, 32)
+    col_list = COL_LIST
+    col_list.append('voting (cols [1-5) )')
+    x_test = load_sample('x_test')
+
+    fig = plt.figure(figsize=(8, 60))
+    ax = []
+    plt.rcParams.update({'font.size': 6})
+    np.random.seed(RANDOM_SEED)
+
+    plotting(load_dataframe('haars_df'), 'hf', indexes[0], col_list, fig, ax,  x_test)
+    plotting(load_dataframe('matrix_df'), 'mf', indexes[1], col_list, fig, ax,  x_test)
+    plotting(load_dataframe('matrix_pca_df'), 'mf_pca', indexes[2], col_list, fig, ax,  x_test)
+
+    plt.show()

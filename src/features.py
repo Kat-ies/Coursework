@@ -3,9 +3,7 @@ functions:
 parse_file()
 split_data(faces_dataset)
 feature_creating(sample, feature_type, h_features)
-save_data(all_features, x_train, x_test, y_test, y_train, path=PATH)
 final_data_preprocessing(faces_dataset, time_df)
-save_time(time_df, path=PATH)
 create_features_and_return_time(faces_dataset)
 
 classes:
@@ -23,6 +21,7 @@ import joblib
 import os
 import random
 from constants import *
+from data_saver import save_dataframe, save_data
 
 
 class HaarFeature:
@@ -118,18 +117,6 @@ def feature_creating(sample, feature_type, h_features):
     return np.array(features)
 
 
-def save_data(all_features, x_train, x_test, y_test, y_train, path=PATH):
-    """
-    function save_data(all_features, x_train, x_test, y_test, y_train, path=PATH)
-    saves all created data to the given path of to the default path
-    """
-    joblib.dump(all_features, os.path.join(path, 'all_features.pkl'))
-    joblib.dump(y_train, os.path.join(path, 'y_train.pkl'))
-    joblib.dump(y_test, os.path.join(path, 'y_test.pkl'))
-    joblib.dump(x_train, os.path.join(path, 'x_train.pkl'))
-    joblib.dump(x_test, os.path.join(path, 'x_test.pkl'))
-
-
 def final_data_preprocessing(faces_dataset, time_df):
     """
     function final_data_preprocessing(faces_dataset, time_df)
@@ -166,17 +153,6 @@ def final_data_preprocessing(faces_dataset, time_df):
     save_data(all_features, x_train, x_test, y_test, y_train)
 
 
-def save_time(time_df, path=PATH):
-    """
-    function save_time(time_df, path=PATH)
-    saves time for feature creation
-    to the given path of to the default path
-    """
-    time_of_features_creat = time_df[COL_LIST[0]].values.tolist()
-    joblib.dump(time_of_features_creat, os.path.join(path, 'time_of_features_creat.pkl'))
-    joblib.dump(time_df, os.path.join(path, 'Dataframes', 'time_df_part0.pkl'))
-
-
 def create_features_and_return_time(faces_dataset):
     """
     function create_features_and_return_time(faces_dataset)
@@ -185,7 +161,7 @@ def create_features_and_return_time(faces_dataset):
     """
     time_df = pd.DataFrame(index=CATEGORIES, columns=COL_LIST)
     final_data_preprocessing(faces_dataset, time_df)
-    save_time(time_df)
+    save_dataframe(time_df, 'time_df_part0')
     return time_df
 
 

@@ -5,6 +5,10 @@ drive_connect()
 
 from google.colab import drive
 
+# забавный факт: в .ipynb файле с фичами команда %run for_google_drive.py
+# позволяет скипнуть авторизацию, а в других файлах нет
+# WTF ????
+
 
 def drive_connect():
     """
