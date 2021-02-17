@@ -4,6 +4,7 @@ show_wider_face_dataset(images_dict, frames_dict)
 show_faces_dataset(faces_dataset)
 plotting(dataframe, feature_type, index, col_list, fig, ax)
 show_wrong_classified_obj()
+plot_graphic(y_points, title)
 """
 
 import matplotlib.pyplot as plt
@@ -85,7 +86,8 @@ def plotting(dataframe, feature_type, index, col_list, fig, ax,  x_test):
         for j in range(COLUMNS_FOR_WRONG_CLF_OBJ):
             rand_num = np.random.randint(0, len(dataframe))
 
-            while dataframe.iloc[rand_num][col_list[i]] == dataframe.iloc[rand_num]['y_test']:
+            while dataframe.iloc[rand_num][col_list[i]] == \
+                    dataframe.iloc[rand_num]['y_test']:
                 rand_num = np.random.randint(0, len(dataframe))
 
             image = x_test[rand_num].img
@@ -96,7 +98,8 @@ def plotting(dataframe, feature_type, index, col_list, fig, ax,  x_test):
             if dataframe.iloc[rand_num]['y_test'] == 0:
                 ax[-1].set_title(feature_type + '; ' + col_list[i] + '; not a face')
             else:
-                ax[-1].set_title(feature_type + '; ' + col_list[i] + '; isn\'t detected ')
+                ax[-1].set_title(feature_type + '; ' + col_list[i]
+                                 + '; isn\'t detected ')
 
             plt.imshow(image, cmap='gray', vmin=0, vmax=255)
 
@@ -116,8 +119,32 @@ def show_wrong_classified_obj():
     plt.rcParams.update({'font.size': 6})
     np.random.seed(RANDOM_SEED)
 
-    plotting(load_dataframe('haars_df'), 'hf', indexes[0], col_list, fig, ax,  x_test)
-    plotting(load_dataframe('matrix_df'), 'mf', indexes[1], col_list, fig, ax,  x_test)
-    plotting(load_dataframe('matrix_pca_df'), 'mf_pca', indexes[2], col_list, fig, ax,  x_test)
+    plotting(load_dataframe('haars_df'), 'hf', indexes[0],
+             col_list, fig, ax,  x_test)
+    plotting(load_dataframe('matrix_df'), 'mf', indexes[1],
+             col_list, fig, ax,  x_test)
+    plotting(load_dataframe('matrix_pca_df'), 'mf_pca', indexes[2],
+             col_list, fig, ax,  x_test)
 
+    plt.show()
+
+
+def plot_graphic(y_points, title):
+    """
+    function plot_graphic(y_points, title) plots
+    graphics for neural networks training part
+    """
+    x_points = lambda x: np.arange(0, len(y_points[x]))
+
+    plt.figure(figsize=(20, 10))
+    plt.title(title, fontsize=18, fontname='Times New Roman')
+    plt.xlabel('Epoch', fontsize=16, fontname='Times New Roman')
+    plt.ylabel('Score', fontsize=16, fontname='Times New Roman')
+    plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
+    if len(y_points) > 1:
+        plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
+        plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
+        plt.legend(FEATURES_LIST, loc='center', shadow=True, fontsize=18)
+    else:
+        plt.legend(['matrix'], loc='center', shadow=True, fontsize=18)
     plt.show()

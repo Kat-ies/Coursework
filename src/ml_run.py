@@ -21,7 +21,7 @@ from data_saver import save_dataframe
 def run_machine_learning():
     """
     function run_machine_learning() creates all dataframes,
-    calls function for loading data and start the process
+    calls function for loading data and starts the process
     of machine learning
     """
     dataframes_names = ['haars_df', 'matrix_df', 'matrix_pca_df']

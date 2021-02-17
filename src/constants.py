@@ -19,9 +19,13 @@ IMG_PATH - used in  •images_and_frames.py as a root for loading
 
 DIRECTORIES - used in  • dataloader.py as a path with archive data
 
-FEATURES_LIST
+FEATURES_LIST - used in • ml_run for creating accuracy dataframe
 
-COL_LIST, CATEGORIES -used in  • features.py for creating time dataframe
+COL_LIST, CATEGORIES - used in  • features.py for working with dataframes
+                                • ml_train_predict for working with dataframes
+                                • nn_train_predict for working with dataframes
+
+NET_COLS - used in • nn_train_predict for working with dataframes
 
 MAXSIZE - used in  • features.py for checking image size
                    • new_dataset_creation.py for resizing images
@@ -63,6 +67,7 @@ DIRECTORIES = ['/content/drive/My Drive/КУ Курсачи/'
 FEATURES_LIST = ['Haars features', 'Matrix features', 'Matrix + PCA features']
 COL_LIST = ['logreg_', 'tree_', 'knn_', 'svm_', 'randforest_', 'ada_boost_', 'grad_boost_']
 CATEGORIES = ['hf_train', 'mf_train', 'pca_train', 'hf_test', 'mf_test', 'pca_test']
+NET_COLS = ['fully_con_net_cpu', 'fully_con_net_gpu', 'convol_net_cpu', 'convol_net_gpu']
 
 MAXSIZE = (25, 25)
 MINSIZE = (20, 20)
@@ -78,3 +83,6 @@ ROWS_FOR_NEW_DATASET = 5
 
 COLUMNS_FOR_WRONG_CLF_OBJ = 4
 ROWS_FOR_WRONG_CLF_OBJ = 24
+
+MAX_ITER = 50000
+LEARNING_RATE = 0.001

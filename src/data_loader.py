@@ -5,11 +5,13 @@ load_dataframe(df_name, path=PATH, folder_name='Dataframes')
 load_sample(sample_name, path=PATH)
 load_data(path=PATH)
 load_ml_model(name, path=PATH, folder='Classificators')
+def load_nn_model(name, path=PATH, folder='Networks')
 """
 
 import os
 import joblib
 import zipfile
+import torch
 from constants import *
 from pandas import read_csv
 
@@ -54,12 +56,27 @@ def load_data(path=PATH):
     return all_features, y_train, y_test, time_df
 
 
+def load_nn_dataframes(exp_num=1):
+    return load_dataframe('haars_net_df' + '_exp_num_' + str(exp_num)), \
+           load_dataframe('matrix_net_df' + '_exp_num_' + str(exp_num)), \
+           load_dataframe('matrix_net_pca_df' + '_exp_num_' + str(exp_num)), \
+           load_dataframe('net_time_df' + '_exp_num_' + str(exp_num))
+
+
 def load_ml_model(name, path=PATH, folder='Classificators'):
     """
     function load_ml_model(name, path=PATH, folder='Classificators')
-    loads trained models for machine learning part
+    loads trained models for the machine learning part
     """
     return joblib.load(os.path.join(path, folder, name + '.pkl'))
+
+
+def load_nn_model(name, path=PATH, folder='Networks'):
+    """
+    function  load_nn_model(name, path=PATH, folder='Networks')
+    loads trained models for the neural networks part
+    """
+    return torch.load(os.path.join(path, folder, name + '.pth'))
 
 
 if __name__ == '__main__':
