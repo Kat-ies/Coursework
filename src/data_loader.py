@@ -1,11 +1,11 @@
 """"
 functions:
 unpacking_zips()
-load_dataframe(df_name, path=PATH, folder_name='Dataframes')
-load_sample(sample_name, path=PATH)
-load_data(path=PATH)
-load_ml_model(name, path=PATH, folder='Classificators')
-def load_nn_model(name, path=PATH, folder='Networks')
+load_dataframe(df_name, path=PROJECT_PATH, folder_name='Dataframes')
+load_sample(sample_name, path=PROJECT_PATH)
+load_data(path=PROJECT_PATH)
+load_ml_model(name, path=PROJECT_PROJECT_PATH, folder='Classificators')
+def load_nn_model(name, path=PROJECT_PATH, folder='Networks')
 """
 
 import os
@@ -25,27 +25,27 @@ def unpacking_zips():
         (zipfile.ZipFile(zips, 'r')).extractall()
 
 
-def load_dataframe(df_name, path=PATH, folder_name='Dataframes'):
+def load_dataframe(df_name, path=PROJECT_PATH, folder_name='Dataframes'):
     """
-    function load_dataframe(df_name, path=PATH, folder_name='Dataframes')
+    function load_dataframe(df_name, path=PROJECT_PATH, folder_name='Dataframes')
     loads dataframe with df_name
     """
     return read_csv(os.path.join(path, folder_name,
                                  df_name + '.csv'), index_col=0, header=0)
 
 
-def load_sample(sample_name, path=PATH):
+def load_sample(sample_name, path=PROJECT_PATH):
     """
-    function load_sample(sample_name, path=PATH)
+    function load_sample(sample_name, path=PROJECT_PATH)
     load sample with sample_name name
     """
     sample = joblib.load(os.path.join(path, sample_name + '.pkl'))
     return sample
 
 
-def load_data(path=PATH):
+def load_data(path=PROJECT_PATH):
     """
-    function load_features(path=PATH)
+    function load_features(path=PROJECT_PATH)
     loads all necessary data for experiments
     """
     all_features, y_train, y_test = load_sample('all_features'), \
@@ -63,17 +63,17 @@ def load_nn_dataframes(exp_num=1):
            load_dataframe('net_time_df' + '_exp_num_' + str(exp_num))
 
 
-def load_ml_model(name, path=PATH, folder='Classificators'):
+def load_ml_model(name, path=PROJECT_PATH, folder='Classificators'):
     """
-    function load_ml_model(name, path=PATH, folder='Classificators')
+    function load_ml_model(name, path=PROJECT_PATH, folder='Classificators')
     loads trained models for the machine learning part
     """
     return joblib.load(os.path.join(path, folder, name + '.pkl'))
 
 
-def load_nn_model(name, path=PATH, folder='Networks'):
+def load_nn_model(name, path=PROJECT_PATH, folder='Networks'):
     """
-    function  load_nn_model(name, path=PATH, folder='Networks')
+    function  load_nn_model(name, path=PROJECT_PATH, folder='Networks')
     loads trained models for the neural networks part
     """
     return torch.load(os.path.join(path, folder, name + '.pth'))

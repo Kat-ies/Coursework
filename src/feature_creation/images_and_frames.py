@@ -53,7 +53,7 @@ def make_frames_dict(image_dict):
     """
     dict_frames = {}  # dict of Rectangle
     # open file with information of marked up data
-    with open(os.path.join(PATH, 'wider_face_train_bbx_gt.txt'), "r+") as file:
+    with open(os.path.join(PROJECT_PATH, 'wider_face_train_bbx_gt.txt'), "r+") as file:
         for lines in file:
             # filename
             filename = lines.rstrip(' \n').split("/")[1]
