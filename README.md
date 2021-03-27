@@ -3,3 +3,4 @@
 
 - добавить docstring в dataloader.py
 - добавить docstring в custom_dataset.py
+- обновить описание в constants.py
