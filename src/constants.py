@@ -59,6 +59,7 @@ Rectangle = namedtuple('Rectangle', 'x y w h')
 HaarRect = namedtuple('HaarRect', 'x y w h weight')
 
 PROJECT_PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
+WORK_PATH = '/content/drive/MyDrive/КУ Курсачи/Курсовая работа 2021/'
 IMG_PATH = 'WIDER_train/images'
 
 DIRECTORIES = ['/content/drive/My Drive/КУ Курсачи/'
