@@ -86,3 +86,6 @@ ROWS_FOR_WRONG_CLF_OBJ = 24
 
 MAX_ITER = 50000
 LEARNING_RATE = 0.001
+
+FASTER_RCNN_ID = '1yGreLksQtlbt0We-9nhgun1yehtL5kJa'
+MODEL_PATH = 'face_detection'
