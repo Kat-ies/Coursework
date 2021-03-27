@@ -16,9 +16,8 @@ from constants import *
 from pandas import read_csv
 import requests
 import torchvision
-from data_loader import download_file_from_google_drive
 from constants import *
-from face_detection.retrain_model import set_device, get_object_detection_model
+from face_detection.retrain_model import *
 
 
 def unpacking_zips():
@@ -119,7 +118,7 @@ def save_response_content(response, destination):
 def load_model(mode='USER', trained=False, model_name='faster_rcnn', id=FASTER_RCNN_ID):
     # model_name is necessary for adding more nets (in future)
     try:
-        device = set_device()
+        device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         model = get_object_detection_model()
         model.to(device)
 
