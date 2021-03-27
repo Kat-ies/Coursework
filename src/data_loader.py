@@ -15,6 +15,10 @@ import torch
 from constants import *
 from pandas import read_csv
 import requests
+import torchvision
+from data_loader import download_file_from_google_drive
+from constants import *
+from face_detection.retrain_model import set_device, get_object_detection_model
 
 
 def unpacking_zips():
@@ -110,6 +114,32 @@ def save_response_content(response, destination):
         for chunk in response.iter_content(CHUNK_SIZE):
             if chunk:  # filter out keep-alive new chunks
                 f.write(chunk)
+
+
+def load_model(mode='USER', trained=False, model_name='faster_rcnn', id=FASTER_RCNN_ID):
+    # model_name is necessary for adding more nets (in future)
+    try:
+        device = set_device()
+        model = get_object_detection_model()
+        model.to(device)
+
+        if mode == 'USER':
+
+            download_file_from_google_drive(id, os.path.join(MODEL_PATH, model_name + '.pth'))
+            model.load_state_dict(os.path.join(MODEL_PATH, model_name + '.pth'))
+            model.eval()
+
+        elif mode == 'ADMIN':
+            if trained:
+                model.load_state_dict(load_nn_model('faster_rcnn', path=WORK_PATH, folder='Models'))
+                model.eval()
+        else:
+            raise RuntimeError('Invalid working mode')
+
+        return model
+
+    except RuntimeError as re:
+        print(*re.args)
 
 
 if __name__ == '__main__':
