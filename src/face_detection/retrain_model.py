@@ -1,0 +1,63 @@
+from face_detection.train_one_epoch import train_one_epoch
+from data_saver import save_nn_model
+from data_loader import load_model
+import math
+from face_detection.transforms import *
+from face_detection.custom_dataset import MyDataset
+from face_detection.train_test_samples import make_samples
+from face_detection.utils import collate_fn
+from torch.utils.data import Dataset, DataLoader
+import torch
+import torchvision
+from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+from constants import *
+
+
+def get_object_detection_model():
+    # load an object detection model pre-trained on COCO
+    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+
+    # replace the classifier with a new one, that has num_classes which is user-defined
+    num_classes = 2  # 1 + background
+
+    # get the number of input features for the classifier
+    in_features = model.roi_heads.box_predictor.cls_score.in_features
+
+    # replace the pre-trained head with a new one
+    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
+    return model
+
+def set_device():
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    return device
+
+def retrain_model():
+    device = set_device()
+    model = load_model(trained=False, mode='ADMIN')
+    # construct an optimizer
+    params = [p for p in model.parameters() if p.requires_grad]
+
+    # optimizer = torch.optim.SGD(params, lr=0.005, momentum=0.9, weight_decay=0.0005)
+    optimizer = torch.optim.Adam(params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
+
+    # and a learning rate scheduler which decreases the learning rate by 10x every 3 epochs
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
+
+    train_dicts = make_samples(mode='TRAIN')
+
+    # train_dataset = MyDataset(load_dicts(train_dicts), transforms=train_transforms)
+    train_dataset = MyDataset(train_dicts, transforms=train_transforms)
+
+    train_data_loader = DataLoader(
+        train_dataset,
+        batch_size=2,
+        shuffle=False,
+        num_workers=0,
+        collate_fn=collate_fn)
+
+    num_epochs = 3
+    for epoch in range(num_epochs):
+        train_one_epoch(model, optimizer, train_data_loader, device, epoch, print_freq=100)
+        lr_scheduler.step()
+
+    save_nn_model(model.state_dict(), 'faster_rcnn', path=WORK_PATH, folder='Models')
