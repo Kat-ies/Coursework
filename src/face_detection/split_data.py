@@ -63,7 +63,7 @@ def make_samples(mode='TRAIN_VAL', max_dict_size=4000):
         # save_dicts(test_dicts, 'test_dicts')
 
         if mode == 'TRAIN_VAL':
-            return test_dicts, train_dicts, val_dicts
+            return train_dicts, val_dicts
         elif mode == 'TRAIN':
             return train_dicts
         elif mode == 'TEST':
