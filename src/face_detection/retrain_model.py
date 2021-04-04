@@ -6,11 +6,18 @@ from face_detection.transforms import *
 from face_detection.custom_dataset import MyDataset
 from face_detection.train_test_samples import make_samples
 from face_detection.utils import collate_fn
+from face_detection.visualization import add_boxes
 from torch.utils.data import Dataset, DataLoader
 import torch
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from constants import *
+
+from face_detection.bounding_box import BoundingBox
+from face_detection.bounding_boxes import BoundingBoxes
+from face_detection.utils import CoordinatesType, BBType, BBFormat
+import face_detection.evaluator as eval
+from face_detection.transforms import test_transforms
 
 
 def get_object_detection_model():
@@ -33,6 +40,19 @@ def set_device():
     return device
 
 
+def validate(val_dict):
+    my_bounding_boxes = BoundingBoxes()
+    add_boxes(val_dict, my_bounding_boxes)
+
+    evaluator = eval.Evaluator()
+
+    results = evaluator.PlotPrecisionRecallCurve(
+        boundingBoxes=my_bounding_boxes, showGraphic=False,
+        showInterpolatedPrecision=False, showAP=True)
+
+    print('AP' + f": {results[0]['AP']}")
+
+
 def retrain_model(num_epochs=3, model='faster_rcnn'):
     device = set_device()
     model = load_model(trained=False, mode='ADMIN')
@@ -45,7 +65,7 @@ def retrain_model(num_epochs=3, model='faster_rcnn'):
     # and a learning rate scheduler which decreases the learning rate by 10x every 3 epochs
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
 
-    train_dicts = make_samples(mode='TRAIN')
+    train_dicts, val_dicts = make_samples(mode='TRAIN_VAL')
 
     # Let's fix everything that can be fixed to get the same results between runs
     torch.manual_seed(RANDOM_SEED)
@@ -64,5 +84,7 @@ def retrain_model(num_epochs=3, model='faster_rcnn'):
     for epoch in range(num_epochs):
         train_one_epoch(model, optimizer, train_data_loader, device, epoch, print_freq=100)
         lr_scheduler.step()
+
+        validate(val_dicts)
 
     save_nn_model(model.state_dict(), model, path=WORK_PATH, folder='Models')

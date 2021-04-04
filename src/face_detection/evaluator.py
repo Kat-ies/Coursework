@@ -17,7 +17,7 @@ import numpy as np
 
 from .bounding_box import *
 from .bounding_boxes import *
-from .utils import *
+from .utils_for_mAP import *
 
 
 class Evaluator:

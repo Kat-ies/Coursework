@@ -7,26 +7,30 @@ from constants import *
 
 
 def split_dictionaries(dict_frames, dict_images, coef=0.25):
-    test_size = int(len(dict_images) * coef)
-    # train_size = len(dict_images) - test_size
+    size = int(len(dict_images) * coef)  # val, test sizes
+    train_size = len(dict_images) - 2 * size
 
-    test_dict_frames, train_dict_frames = {}, {}
-    test_dict_images, train_dict_images = {}, {}
+    test_dict_frames, train_dict_frames, val_dict_frames = {}, {}, {}
+    test_dict_images, train_dict_images, val_dict_images = {}, {}, {}
 
     keys = list(dict_images.keys())
 
     for i, key in enumerate(keys):
-        if i < test_size:
+        if i < train_size:
+            train_dict_frames[key] = dict_frames[key]
+            train_dict_images[key] = dict_images[key]
+        elif i < train_size + size:
             test_dict_frames[key] = dict_frames[key]
             test_dict_images[key] = dict_images[key]
         else:
-            train_dict_frames[key] = dict_frames[key]
-            train_dict_images[key] = dict_images[key]
+            val_dict_frames[key] = dict_frames[key]
+            val_dict_images[key] = dict_images[key]
 
     # free memory
     dict_frames.clear(), dict_images.clear()
 
-    return (test_dict_images, test_dict_frames), (train_dict_images, train_dict_frames)
+    return (test_dict_images, test_dict_frames), (train_dict_images, train_dict_frames),\
+           (val_dict_images, val_dict_frames)
 
 
 def make_valide_dict(dict_images, dict_frames):
@@ -42,7 +46,7 @@ def make_valide_dict(dict_images, dict_frames):
                     del dict_images[key]
 
 
-def make_samples(mode='TRAIN_TEST', max_dict_size=3000):
+def make_samples(mode='TRAIN_VAL', max_dict_size=4000):
     unpacking_zips()
 
     try:
@@ -51,19 +55,21 @@ def make_samples(mode='TRAIN_TEST', max_dict_size=3000):
         dict_frames = make_frames_dict(dict_images)
 
         make_valide_dict(dict_images, dict_frames)
-        test_dicts, train_dicts = split_dictionaries(dict_frames, dict_images)
+        test_dicts, train_dicts, val_dicts = split_dictionaries(dict_frames, dict_images)
 
         # я хотела сохранить словари, чтобы больше не грузить исходный датасет,
         # а сразу грузить их, но оно почему вываливается по памяти :(
         # save_dicts(train_dicts, 'train_dicts')
         # save_dicts(test_dicts, 'test_dicts')
 
-        if mode == 'TRAIN_TEST':
-            return test_dicts, train_dicts
+        if mode == 'TRAIN_VAL':
+            return test_dicts, train_dicts, val_dicts
         elif mode == 'TRAIN':
             return train_dicts
         elif mode == 'TEST':
             return test_dicts
+        elif mode == 'VAL':
+            return val_dicts
         else:
             raise RuntimeError('Invalid working mode')
 
