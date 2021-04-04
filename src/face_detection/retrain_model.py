@@ -20,9 +20,9 @@ import face_detection.evaluator as eval
 from face_detection.transforms import test_transforms
 
 
-def get_object_detection_model():
-    # load an object detection model pre-trained on COCO
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+def get_object_detection_model(pretrained=True):
+    # load an object detection model pre-trained on COCO == pretrained=True
+    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=pretrained)
 
     # replace the classifier with a new one, that has num_classes which is user-defined
     num_classes = 2  # 1 + background
@@ -85,6 +85,8 @@ def retrain_model(num_epochs=3, model='faster_rcnn'):
         train_one_epoch(model, optimizer, train_data_loader, device, epoch, print_freq=100)
         lr_scheduler.step()
 
-        validate(val_dicts)
+        # валидации пока нет, тк на неё не хватает памяти,
+        # даже при таких маленьких размерах выборок :(
+        # validate(val_dicts)
 
     save_nn_model(model.state_dict(), model, path=WORK_PATH, folder='Models')

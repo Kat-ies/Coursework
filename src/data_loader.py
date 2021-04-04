@@ -99,38 +99,6 @@ def load_nn_model(name, path=PROJECT_PATH, folder='Networks'):
     return torch.load(os.path.join(path, folder, name + '.pth'))
 
 
-def download_file_from_google_drive(id, destination):
-    URL = "https://docs.google.com/uc?export=download"
-
-    session = requests.Session()
-
-    response = session.get(URL, params={'id': id}, stream=True)
-    token = get_confirm_token(response)
-
-    if token:
-        params = {'id': id, 'confirm': token}
-        response = session.get(URL, params=params, stream=True)
-
-    save_response_content(response, destination)
-
-
-def get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
-            return value
-
-    return None
-
-
-def save_response_content(response, destination):
-    CHUNK_SIZE = 32768
-
-    with open(destination, "wb") as f:
-        for chunk in response.iter_content(CHUNK_SIZE):
-            if chunk:  # filter out keep-alive new chunks
-                f.write(chunk)
-
-
 def load_model(mode='USER', trained=False, model_name='faster_rcnn', id=FASTER_RCNN_ID):
     # model_name is necessary for adding more nets (in future)
     try:
@@ -138,13 +106,14 @@ def load_model(mode='USER', trained=False, model_name='faster_rcnn', id=FASTER_R
         model = get_object_detection_model()
         model.to(device)
 
-        if mode == 'USER':
+        '''if mode == 'USER':
 
             download_file_from_google_drive(id, os.path.join(MODEL_PATH, model_name + '.pth'))
             model.load_state_dict(os.path.join(MODEL_PATH, model_name + '.pth'))
-            model.eval()
+            model.eval()'''
 
-        elif mode == 'ADMIN':
+        # elif mode == 'ADMIN':
+        if mode == 'ADMIN':
             if trained:
                 model.load_state_dict(load_nn_model('faster_rcnn', path=WORK_PATH, folder='Models'))
                 model.eval()
