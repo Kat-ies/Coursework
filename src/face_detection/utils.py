@@ -321,8 +321,9 @@ def init_distributed_mode(args):
                                          world_size=args.world_size, rank=args.rank)
     torch.distributed.barrier()
     setup_for_distributed(args.rank == 0)
-from enum import Enum
 
+
+from enum import Enum
 import cv2
 
 
@@ -446,6 +447,8 @@ def add_bb_into_image(image, bb, color=(255, 0, 0), thickness=2, label=None):
         cv2.putText(image, label, (xin_bb, yin_bb), font, fontScale, (0, 0, 0), fontThickness,
                     cv2.LINE_AA)
     return image
+
+
 from enum import Enum
 
 import cv2

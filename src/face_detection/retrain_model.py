@@ -27,11 +27,13 @@ def get_object_detection_model():
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
     return model
 
+
 def set_device():
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     return device
 
-def retrain_model():
+
+def retrain_model(num_epochs=3, model='faster_rcnn'):
     device = set_device()
     model = load_model(trained=False, mode='ADMIN')
     # construct an optimizer
@@ -45,6 +47,10 @@ def retrain_model():
 
     train_dicts = make_samples(mode='TRAIN')
 
+    # Let's fix everything that can be fixed to get the same results between runs
+    torch.manual_seed(RANDOM_SEED)
+    torch.cuda.manual_seed_all(RANDOM_SEED)
+
     # train_dataset = MyDataset(load_dicts(train_dicts), transforms=train_transforms)
     train_dataset = MyDataset(train_dicts, transforms=train_transforms)
 
@@ -55,9 +61,8 @@ def retrain_model():
         num_workers=0,
         collate_fn=collate_fn)
 
-    num_epochs = 3
     for epoch in range(num_epochs):
         train_one_epoch(model, optimizer, train_data_loader, device, epoch, print_freq=100)
         lr_scheduler.step()
 
-    save_nn_model(model.state_dict(), 'faster_rcnn', path=WORK_PATH, folder='Models')
+    save_nn_model(model.state_dict(), model, path=WORK_PATH, folder='Models')
