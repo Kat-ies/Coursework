@@ -4,7 +4,7 @@ from face_detection.bounding_boxes import BoundingBoxes
 from face_detection.utils_for_mAP import CoordinatesType, BBType, BBFormat
 from constants import *
 import face_detection.evaluator as eval
-from face_detection.train_test_samples import make_samples
+from face_detection.split_data import make_samples
 from face_detection.transforms import test_transforms
 import torch
 from PIL import Image, ImageDraw
