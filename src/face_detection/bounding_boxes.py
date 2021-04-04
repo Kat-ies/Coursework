@@ -1,5 +1,5 @@
 from .bounding_box import *
-from .utils import *
+from .utils_for_mAP import *
 
 
 class BoundingBoxes:

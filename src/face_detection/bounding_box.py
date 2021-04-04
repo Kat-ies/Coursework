@@ -1,4 +1,4 @@
-from .utils import *
+from .utils_for_mAP import *
 
 
 class BoundingBox:
