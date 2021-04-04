@@ -15,7 +15,7 @@ from constants import *
 
 from face_detection.bounding_box import BoundingBox
 from face_detection.bounding_boxes import BoundingBoxes
-from face_detection.utils import CoordinatesType, BBType, BBFormat
+from face_detection.utils_for_mAP import CoordinatesType, BBType, BBFormat
 import face_detection.evaluator as eval
 from face_detection.transforms import test_transforms
 
