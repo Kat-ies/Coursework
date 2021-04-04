@@ -4,7 +4,7 @@ from data_loader import load_model
 import math
 from face_detection.transforms import *
 from face_detection.custom_dataset import MyDataset
-from face_detection.train_test_samples import make_samples
+from face_detection.split_data import make_samples
 from face_detection.utils import collate_fn
 from face_detection.visualization import add_boxes
 from torch.utils.data import Dataset, DataLoader
