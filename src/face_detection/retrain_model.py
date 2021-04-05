@@ -53,7 +53,7 @@ def validate(val_dict):
     print('AP' + f": {results[0]['AP']}")
 
 
-def retrain_model(num_epochs=3, model='faster_rcnn'):
+def retrain_model(num_epochs=3, model_name='faster_rcnn'):
     device = set_device()
     model = load_model(trained=False, mode='ADMIN')
     # construct an optimizer
@@ -89,4 +89,4 @@ def retrain_model(num_epochs=3, model='faster_rcnn'):
         # даже при таких маленьких размерах выборок :(
         # validate(val_dicts)
 
-    save_nn_model(model.state_dict(), model, path=WORK_PATH, folder='Models')
+    save_nn_model(model.state_dict(), model_name, path=WORK_PATH, folder='Models')
