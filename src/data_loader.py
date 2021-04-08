@@ -21,9 +21,9 @@ from constants import *
 # from face_detection.retrain_model import get_object_detection_model
 # строка 20 у меня почему-то не работает:( Только если так:
 
-def get_object_detection_model():
-    # load an object detection model pre-trained on COCO
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+def get_object_detection_model(pretrained=True):
+    # load an object detection model pre-trained on COCO == pretrained=True
+    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=pretrained)
 
     # replace the classifier with a new one, that has num_classes which is user-defined
     num_classes = 2  # 1 + background
@@ -99,11 +99,11 @@ def load_nn_model(name, path=PROJECT_PATH, folder='Networks'):
     return torch.load(os.path.join(path, folder, name + '.pth'))
 
 
-def load_model(mode='USER', trained=False, model_name='faster_rcnn', id=FASTER_RCNN_ID):
+def load_model(mode='USER', trained=False, pretrained=True, model_name='faster_rcnn', id=FASTER_RCNN_ID):
     # model_name is necessary for adding more nets (in future)
     try:
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-        model = get_object_detection_model()
+        model = get_object_detection_model(psretrained)
         model.to(device)
 
         '''if mode == 'USER':
