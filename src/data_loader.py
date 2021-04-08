@@ -103,7 +103,7 @@ def load_model(mode='USER', trained=False, pretrained=True, model_name='faster_r
     # model_name is necessary for adding more nets (in future)
     try:
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-        model = get_object_detection_model(psretrained)
+        model = get_object_detection_model(pretrained)
         model.to(device)
 
         '''if mode == 'USER':
