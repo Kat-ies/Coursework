@@ -14,7 +14,7 @@ import numpy as np
 import os
 
 
-def add_boxes(test_dicts, my_bounding_boxes, model=load_model(trained=True, mode='ADMIN')):
+def add_boxes(test_dicts, my_bounding_boxes, model):
     dict_images = test_dicts[0]
     dict_frames = test_dicts[1]
 
@@ -53,11 +53,14 @@ def add_boxes(test_dicts, my_bounding_boxes, model=load_model(trained=True, mode
             # print(detected_bounding_box.getAbsoluteBoundingBox())
 
 
-def show_retrain_results():
+def show_retrain_results(trained=True, pretrained=True, model_name='faster_rcnn'):
     my_bounding_boxes = BoundingBoxes()
 
     test_dicts = make_samples(mode='TEST')
-    add_boxes(test_dicts, my_bounding_boxes)
+
+    model = load_model(mode='ADMIN', trained=trained, pretrained=pretrained, model_name=model_name)
+
+    add_boxes(test_dicts, my_bounding_boxes, model)
 
     evaluator = eval.Evaluator()
 
@@ -110,7 +113,7 @@ def show_predictions(images, predictions, threshold):
     plt.show()  # finally, render the plot
 
 
-def show_image_examples(threshold=0.5):
+def show_image_examples(threshold=0.5, trained=True, pretrained=True, model_name='faster_rcnn'):
     files = os.listdir(os.path.join(WORK_PATH, 'images'))
     files.sort()
 
@@ -118,7 +121,7 @@ def show_image_examples(threshold=0.5):
     predictions = []
 
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    model = load_model(trained=True, mode='ADMIN')
+    model = load_model(mode='ADMIN', trained=trained, pretrained=pretrained, model_name=model_name)
 
     for file in files:
         image = Image.open(os.path.join(WORK_PATH, 'images', file))

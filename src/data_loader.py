@@ -115,7 +115,7 @@ def load_model(mode='USER', trained=False, pretrained=True, model_name='faster_r
         # elif mode == 'ADMIN':
         if mode == 'ADMIN':
             if trained:
-                model.load_state_dict(load_nn_model('faster_rcnn', path=WORK_PATH, folder='Models'))
+                model.load_state_dict(load_nn_model('model_name', path=WORK_PATH, folder='Models'))
                 model.eval()
         else:
             raise RuntimeError('Invalid working mode')
