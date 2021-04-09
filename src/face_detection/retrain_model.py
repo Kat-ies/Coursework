@@ -1,38 +1,18 @@
 from face_detection.train_one_epoch import train_one_epoch
 from data_saver import save_nn_model
-from data_loader import load_model
-import math
+from data_loader import load_model, get_object_detection_model
 from face_detection.transforms import *
 from face_detection.custom_dataset import MyDataset
 from face_detection.split_data import make_samples
 from face_detection.utils import collate_fn
 from face_detection.visualization import add_boxes
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 import torch
-import torchvision
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from constants import *
-
-from face_detection.bounding_box import BoundingBox
 from face_detection.bounding_boxes import BoundingBoxes
-from face_detection.utils_for_mAP import CoordinatesType, BBType, BBFormat
 import face_detection.evaluator as eval
-from face_detection.transforms import test_transforms
 
-
-def get_object_detection_model(pretrained=True):
-    # load an object detection model pre-trained on COCO == pretrained=True
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=pretrained)
-
-    # replace the classifier with a new one, that has num_classes which is user-defined
-    num_classes = 2  # 1 + background
-
-    # get the number of input features for the classifier
-    in_features = model.roi_heads.box_predictor.cls_score.in_features
-
-    # replace the pre-trained head with a new one
-    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-    return model
+from src.face_detection.transforms import train_transforms
 
 
 def set_device():

@@ -18,21 +18,42 @@ import requests
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from constants import *
+from torchvision.models.detection.retinanet import RetinaNetHead
 # from face_detection.retrain_model import get_object_detection_model
 # строка 20 у меня почему-то не работает:( Только если так:
 
-def get_object_detection_model(pretrained=True):
-    # load an object detection model pre-trained on COCO == pretrained=True
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=pretrained)
 
-    # replace the classifier with a new one, that has num_classes which is user-defined
-    num_classes = 2  # 1 + background
+def get_object_detection_model(pretrained=True, model_name='faster_rcnn'):
+    try:
+        # replace the classifier with a new one, that has num_classes which is user-defined
+        num_classes = 2  # 1 + background
 
-    # get the number of input features for the classifier
-    in_features = model.roi_heads.box_predictor.cls_score.in_features
+        if model_name == 'faster_rcnn' or model_name == 'faster_rcnn_not_pretrained':
+            # load an object detection model pre-trained on COCO == pretrained=True
+            model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=pretrained)
 
-    # replace the pre-trained head with a new one
-    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
+            # get the number of input features for the classifier
+            in_features = model.roi_heads.box_predictor.cls_score.in_features
+
+            # replace the pre-trained head with a new one
+            model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
+
+        elif model_name == 'retina_net' or model_name == 'retina_net_not_pretrained':
+            model = torchvision.models.detection.retinanet_resnet50_fpn(pretrained=pretrained)
+
+            # get number of input features and anchor boxed for the classifier
+            in_features = model.head.classification_head.conv[0].in_channels
+            num_anchors = model.head.classification_head.num_anchors
+
+            # replace the pre-trained head with a new one
+            model.head = RetinaNetHead(in_features, num_anchors, num_classes)
+
+        else:
+            raise RuntimeError('Invalid model name!')
+
+    except RuntimeError as re:
+        print(*re.args)
+
     return model
 
 
@@ -103,7 +124,7 @@ def load_model(mode='USER', trained=False, pretrained=True, model_name='faster_r
     # model_name is necessary for adding more nets (in future)
     try:
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-        model = get_object_detection_model(pretrained)
+        model = get_object_detection_model(pretrained, model_name)
         model.to(device)
 
         '''if mode == 'USER':
