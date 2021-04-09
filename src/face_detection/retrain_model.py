@@ -35,7 +35,7 @@ def validate(val_dict):
 
 def retrain_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
     device = set_device()
-    model = load_model(trained=False, pretrained=pretrained, mode='ADMIN')
+    model = load_model(trained=False, pretrained=pretrained, mode='ADMIN', model_name=model_name)
     # construct an optimizer
     params = [p for p in model.parameters() if p.requires_grad]
 
