@@ -12,7 +12,7 @@ from constants import *
 from face_detection.bounding_boxes import BoundingBoxes
 import face_detection.evaluator as eval
 
-from src.face_detection.transforms import train_transforms
+from face_detection.transforms import train_transforms
 
 
 def set_device():
