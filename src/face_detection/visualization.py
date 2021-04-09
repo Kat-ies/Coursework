@@ -113,7 +113,8 @@ def show_predictions(images, predictions, threshold):
     plt.show()  # finally, render the plot
 
 
-def show_image_examples(threshold=0.5, trained=True, pretrained=True, model_name='faster_rcnn'):
+def show_image_examples(threshold=0.5, trained=True, pretrained=True, model_name='faster_rcnn',
+                        folder='images'):
     files = os.listdir(os.path.join(WORK_PATH, 'images'))
     files.sort()
 
@@ -124,7 +125,7 @@ def show_image_examples(threshold=0.5, trained=True, pretrained=True, model_name
     model = load_model(mode='ADMIN', trained=trained, pretrained=pretrained, model_name=model_name)
 
     for file in files:
-        image = Image.open(os.path.join(WORK_PATH, 'images', file))
+        image = Image.open(os.path.join(WORK_PATH, folder, file))
         img = test_transforms(image)
         images.append(image)
 
