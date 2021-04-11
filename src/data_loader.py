@@ -1,12 +1,19 @@
 """"
 functions:
 unpacking_zips()
+load_dataframe(df_name, path=PATH, folder_name='Dataframes')
+load_sample(sample_name, path=PATH)
+load_data(path=PATH)
+load_ml_model(name, path=PATH, folder='Classificators')
+def load_nn_model(name, path=PATH, folder='Networks')
 """
 
 import os
 import joblib
 import zipfile
+import torch
 from constants import *
+from pandas import read_csv
 
 
 def unpacking_zips():
@@ -18,42 +25,58 @@ def unpacking_zips():
         (zipfile.ZipFile(zips, 'r')).extractall()
 
 
-def ml_method(path):
-    x_test = joblib.load(os.path.join(path, 'x_test.pkl'))
-    time_df = joblib.load(os.path.join(path, 'Dataframes', 'time_df_part0.pkl'))
-    return x_test, time_df
+def load_dataframe(df_name, path=PATH, folder_name='Dataframes'):
+    """
+    function load_dataframe(df_name, path=PATH, folder_name='Dataframes')
+    loads dataframe with df_name
+    """
+    return read_csv(os.path.join(path, folder_name,
+                                 df_name + '.csv'), index_col=0, header=0)
 
 
-def nn_method(path):
-    time_of_features_creat = joblib.load(os.path.join(path, 'time_of_features_creat.pkl'))
-    return time_of_features_creat
+def load_sample(sample_name, path=PATH):
+    """
+    function load_sample(sample_name, path=PATH)
+    load sample with sample_name name
+    """
+    sample = joblib.load(os.path.join(path, sample_name + '.pkl'))
+    return sample
 
 
-def load_features(method_type, path=PATH):
-    all_features = joblib.load(os.path.join(path, 'all_features.pkl'))
-    y_train = joblib.load(os.path.join(path, 'y_train.pkl'))
-    y_test = joblib.load(os.path.join(path, 'y_test.pkl'))
-    if method_type == 'ml_meth':
-        x_test, time_df = ml_method(path)
-        return all_features, y_train, y_test,  x_test, time_df
-    else:
-        time_of_features_creat = nn_method(path)
-        return all_features, y_train, y_test, time_of_features_creat
+def load_data(path=PATH):
+    """
+    function load_features(path=PATH)
+    loads all necessary data for experiments
+    """
+    all_features, y_train, y_test = load_sample('all_features'), \
+                                    load_sample('y_train'), \
+                                    load_sample('y_test')
+    time_df = load_dataframe('time_df_part0')
 
-# заметки, чтобы потом спросить и сделать код выше красивее
-# изначально я хотела сделать такую штуку:
-# def meth1():
-#     pass
-#
-# def meth2():
-#     pass
-#
-# def run_meth(method):
-#     return method()
-#
-# run_meth(meth1)
-# run_meth(meth2)
-# но у меня не получилось запустить такое из ноутбука :(
+    return all_features, y_train, y_test, time_df
+
+
+def load_nn_dataframes(exp_num=1):
+    return load_dataframe('haars_net_df' + '_exp_num_' + str(exp_num)), \
+           load_dataframe('matrix_net_df' + '_exp_num_' + str(exp_num)), \
+           load_dataframe('matrix_net_pca_df' + '_exp_num_' + str(exp_num)), \
+           load_dataframe('net_time_df' + '_exp_num_' + str(exp_num))
+
+
+def load_ml_model(name, path=PATH, folder='Classificators'):
+    """
+    function load_ml_model(name, path=PATH, folder='Classificators')
+    loads trained models for the machine learning part
+    """
+    return joblib.load(os.path.join(path, folder, name + '.pkl'))
+
+
+def load_nn_model(name, path=PATH, folder='Networks'):
+    """
+    function  load_nn_model(name, path=PATH, folder='Networks')
+    loads trained models for the neural networks part
+    """
+    return torch.load(os.path.join(path, folder, name + '.pth'))
 
 
 if __name__ == '__main__':

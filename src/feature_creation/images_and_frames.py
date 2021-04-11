@@ -6,10 +6,8 @@ make_frames_dict(image_dict)
 
 import os
 from PIL import Image
+from constants import *
 from collections import namedtuple
-
-PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
-IMG_PATH = 'WIDER_train/images'
 
 
 def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
@@ -33,10 +31,6 @@ def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
             list_name[cur_file] = img
             if len(list_name) == max_dict_size:
                 return list_name
-
-
-# rectangle params
-Rectangle = namedtuple('Rectangle', 'x y w h')
 
 
 def make_frames_dict(image_dict):
