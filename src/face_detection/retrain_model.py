@@ -45,7 +45,7 @@ def retrain_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
     # and a learning rate scheduler which decreases the learning rate by 10x every 3 epochs
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
 
-    train_dicts, val_dicts = make_samples(mode='TRAIN_VAL')
+    train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=1000)
 
     # Let's fix everything that can be fixed to get the same results between runs
     torch.manual_seed(RANDOM_SEED)
