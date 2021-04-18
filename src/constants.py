@@ -8,7 +8,7 @@ Faces, Rectangle - used in • dataloader.py for correct data loading
 
 HaarRect - used in • features.py for storing rectangles in haars features
 
-PATH - used in  • data_loader.py for loading features
+PROJECT_PATH - used in  • data_loader.py for loading features
                 • features.py for loading .xml file with
                 haars features and saving data
                 •images_and_frames.py for loading marked up file with frames
@@ -58,7 +58,8 @@ Faces = namedtuple('Faces', 'img is_face filename rect')
 Rectangle = namedtuple('Rectangle', 'x y w h')
 HaarRect = namedtuple('HaarRect', 'x y w h weight')
 
-PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
+PROJECT_PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
+WORK_PATH = '/content/drive/MyDrive/КУ Курсачи/Курсовая работа 2021/'
 IMG_PATH = 'WIDER_train/images'
 
 DIRECTORIES = ['/content/drive/My Drive/КУ Курсачи/'
@@ -86,3 +87,9 @@ ROWS_FOR_WRONG_CLF_OBJ = 24
 
 MAX_ITER = 50000
 LEARNING_RATE = 0.001
+
+FASTER_RCNN_ID = '1yGreLksQtlbt0We-9nhgun1yehtL5kJa'
+MODEL_PATH = 'face_detection'
+
+SCORE_BACKGROUND_LABEL_WIDTH = 65
+SCORE_BACKGROUND_LABEL_HEIGHT = 14

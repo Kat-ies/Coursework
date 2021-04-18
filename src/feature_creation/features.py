@@ -66,7 +66,7 @@ def parse_file():
     """
     h_features = []
     # load xml file and parse it
-    with open(os.path.join(PATH, 'my_features.xml')) as fobj:
+    with open(os.path.join(PROJECT_PATH, 'my_features.xml')) as fobj:
         xml = fobj.read()
         root = etree.fromstring(xml)
 
