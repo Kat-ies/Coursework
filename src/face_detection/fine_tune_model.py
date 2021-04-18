@@ -38,39 +38,41 @@ def validate(val_dict, model):
 def fine_tune_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
     device = set_device()
     model = load_model(trained=False, pretrained=pretrained, mode='ADMIN', model_name=model_name)
-    # construct an optimizer
-    params = [p for p in model.parameters() if p.requires_grad]
 
-    if model_name == 'retina_net' or model_name == 'retina_net_not_pretrained':
-        optimizer = torch.optim.SGD(params, lr=0.0005, momentum=0.9, weight_decay=0.0005)
-    else:
-        optimizer = torch.optim.Adam(params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
+    if model:
+        # construct an optimizer
+        params = [p for p in model.parameters() if p.requires_grad]
 
-    # and a learning rate scheduler which decreases the learning rate by 10x every 3 epochs
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
+        if model_name == 'retina_net' or model_name == 'retina_net_not_pretrained':
+            optimizer = torch.optim.SGD(params, lr=0.0005, momentum=0.9, weight_decay=0.0005)
+        else:
+            optimizer = torch.optim.Adam(params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
 
-    train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=2000)
+        # and a learning rate scheduler which decreases the learning rate by 10x every 3 epochs
+        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
 
-    # Let's fix everything that can be fixed to get the same results between runs
-    torch.manual_seed(RANDOM_SEED)
-    torch.cuda.manual_seed_all(RANDOM_SEED)
+        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=4000)
 
-    # train_dataset = MyDataset(load_dicts(train_dicts), transforms=train_transforms)
-    train_dataset = MyDataset(train_dicts, transforms=train_transforms)
+        # Let's fix everything that can be fixed to get the same results between runs
+        torch.manual_seed(RANDOM_SEED)
+        torch.cuda.manual_seed_all(RANDOM_SEED)
 
-    train_data_loader = DataLoader(
-        train_dataset,
-        batch_size=2,
-        shuffle=False,
-        num_workers=0,
-        collate_fn=collate_fn)
+        # train_dataset = MyDataset(load_dicts(train_dicts), transforms=train_transforms)
+        train_dataset = MyDataset(train_dicts, transforms=train_transforms)
 
-    for epoch in range(num_epochs):
-        train_one_epoch(model, optimizer, train_data_loader, device, epoch, print_freq=100)
-        lr_scheduler.step()
+        train_data_loader = DataLoader(
+            train_dataset,
+            batch_size=2,
+            shuffle=False,
+            num_workers=0,
+            collate_fn=collate_fn)
 
-        # валидации пока нет, тк на неё не хватает памяти,
-        # даже при таких маленьких размерах выборок :(
-        # validate(val_dicts)
+        for epoch in range(num_epochs):
+            train_one_epoch(model, optimizer, train_data_loader, device, epoch, print_freq=100)
+            lr_scheduler.step()
 
-    save_nn_model(model.state_dict(), model_name, path=WORK_PATH, folder='Models')
+            # валидации пока нет, тк на неё не хватает памяти,
+            # даже при таких маленьких размерах выборок :(
+            # validate(val_dicts)
+
+        save_nn_model(model.state_dict(), model_name, path=WORK_PATH, folder='Models')

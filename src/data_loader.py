@@ -55,6 +55,7 @@ def get_object_detection_model(pretrained=True, model_name='faster_rcnn'):
 
     except RuntimeError as re:
         print(*re.args)
+        return
 
     return model
 
@@ -127,7 +128,11 @@ def load_model(mode='USER', trained=False, pretrained=True, model_name='faster_r
     try:
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         model = get_object_detection_model(pretrained, model_name)
-        model.to(device)
+
+        if model is None:
+            return
+        else:
+            model.to(device)
 
         '''if mode == 'USER':
 
