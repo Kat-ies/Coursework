@@ -2,7 +2,7 @@ from face_detection.train_one_epoch import train_one_epoch
 from data_saver import save_nn_model
 from data_loader import load_model, get_object_detection_model
 from face_detection.transforms import *
-from face_detection.custom_dataset import MyDataset
+from face_detection.custom_dataset import FacesDataset
 from face_detection.split_data import make_samples
 from face_detection.utils import collate_fn
 from face_detection.visualization import add_boxes
@@ -57,8 +57,8 @@ def fine_tune_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
         torch.manual_seed(RANDOM_SEED)
         torch.cuda.manual_seed_all(RANDOM_SEED)
 
-        # train_dataset = MyDataset(load_dicts(train_dicts), transforms=train_transforms)
-        train_dataset = MyDataset(train_dicts, transforms=train_transforms)
+        # train_dataset = FacesDataset(load_dicts(train_dicts), transforms=train_transforms)
+        train_dataset = FacesDataset(train_dicts, transforms=train_transforms)
 
         train_data_loader = DataLoader(
             train_dataset,
@@ -73,6 +73,6 @@ def fine_tune_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
 
             # валидации пока нет, тк на неё не хватает памяти,
             # даже при таких маленьких размерах выборок :(
-            # validate(val_dicts)
+            # validate(val_dicts, model)
 
         save_nn_model(model.state_dict(), model_name, path=WORK_PATH, folder='Models')

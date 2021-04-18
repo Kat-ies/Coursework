@@ -28,8 +28,6 @@ def add_boxes(test_dicts, my_bounding_boxes, model):
                                           bbType=BBType.GroundTruth, format=BBFormat.XYWH,
                                           imgSize=dict_images[key].size)
             my_bounding_boxes.addBoundingBox(gt_bounding_box)
-            # print(rectangle)
-            # print(gt_bounding_box.getAbsoluteBoundingBox())
 
         # now let's make predictions and add to our boxes all detected boxes
         image = test_transforms(dict_images[key])
@@ -49,8 +47,6 @@ def add_boxes(test_dicts, my_bounding_boxes, model):
                                                 bbType=BBType.Detected, format=BBFormat.XYX2Y2,
                                                 imgSize=dict_images[key].size)
             my_bounding_boxes.addBoundingBox(detected_bounding_box)
-            # print(box)
-            # print(detected_bounding_box.getAbsoluteBoundingBox())
 
 
 def show_retrain_results(trained=True, pretrained=True, model_name='faster_rcnn'):
