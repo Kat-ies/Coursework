@@ -42,7 +42,7 @@ def fine_tune_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
     params = [p for p in model.parameters() if p.requires_grad]
 
     if model_name == 'retina_net' or model_name == 'retina_net_not_pretrained':
-        optimizer = torch.optim.SGD(params, lr=0.005, momentum=0.9, weight_decay=0.0005)
+        optimizer = torch.optim.SGD(params, lr=0.0005, momentum=0.9, weight_decay=0.0005)
     else:
         optimizer = torch.optim.Adam(params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
 
