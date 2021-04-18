@@ -41,14 +41,14 @@ def get_object_detection_model(pretrained=True, model_name='faster_rcnn'):
             model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
 
         elif model_name == 'retina_net' or model_name == 'retina_net_not_pretrained':
-            model = torchvision.models.detection.retinanet_resnet50_fpn(pretrained=pretrained, num_classes=2)
+            model = torchvision.models.detection.retinanet_resnet50_fpn(pretrained=pretrained)
 
             # get number of input features and anchor boxed for the classifier
-            #in_features = model.head.classification_head.conv[0].in_channels
-            #num_anchors = model.head.classification_head.num_anchors
+            in_features = model.head.classification_head.conv[0].in_channels
+            num_anchors = model.head.classification_head.num_anchors
 
             # replace the pre-trained head with a new one
-            #model.head = RetinaNetHead(in_features, num_anchors, num_classes)
+            model.head = RetinaNetHead(in_features, num_anchors, num_classes)
 
         else:
             raise RuntimeError('Invalid model name!')

@@ -20,9 +20,11 @@ def set_device():
     return device
 
 
-def validate(val_dict):
+def validate(val_dict, model):
+    model.eval()
     my_bounding_boxes = BoundingBoxes()
-    add_boxes(val_dict, my_bounding_boxes)
+    add_boxes(val_dict, my_bounding_boxes, model)
+    model.train()
 
     evaluator = eval.Evaluator()
 
@@ -33,19 +35,21 @@ def validate(val_dict):
     print('AP' + f": {results[0]['AP']}")
 
 
-def retrain_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
+def fine_tune_model(num_epochs=3, pretrained=True, model_name='faster_rcnn'):
     device = set_device()
     model = load_model(trained=False, pretrained=pretrained, mode='ADMIN', model_name=model_name)
     # construct an optimizer
     params = [p for p in model.parameters() if p.requires_grad]
 
-    # optimizer = torch.optim.SGD(params, lr=0.005, momentum=0.9, weight_decay=0.0005)
-    optimizer = torch.optim.Adam(params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
+    if model_name == 'retina_net' or model_name == 'retina_net_not_pretrained':
+        optimizer = torch.optim.SGD(params, lr=0.005, momentum=0.9, weight_decay=0.0005)
+    else:
+        optimizer = torch.optim.Adam(params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
 
     # and a learning rate scheduler which decreases the learning rate by 10x every 3 epochs
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
 
-    train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=1000)
+    train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=2000)
 
     # Let's fix everything that can be fixed to get the same results between runs
     torch.manual_seed(RANDOM_SEED)
