@@ -1,4 +1,3 @@
-from data_loader import load_model
 from face_detection.bounding_box import BoundingBox
 from face_detection.bounding_boxes import BoundingBoxes
 from face_detection.utils_for_mAP import CoordinatesType, BBType, BBFormat
