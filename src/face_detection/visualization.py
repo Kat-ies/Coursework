@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 import os
+from face_detection.detectors import *
 
 
 def add_boxes(test_dicts, my_bounding_boxes, model):
@@ -47,27 +48,6 @@ def add_boxes(test_dicts, my_bounding_boxes, model):
                                                 bbType=BBType.Detected, format=BBFormat.XYX2Y2,
                                                 imgSize=dict_images[key].size)
             my_bounding_boxes.addBoundingBox(detected_bounding_box)
-
-
-def show_retrain_results(trained=True, pretrained=True, model_name='faster_rcnn'):
-    my_bounding_boxes = BoundingBoxes()
-
-    test_dicts = make_samples(mode='TEST')
-
-    model = load_model(mode='ADMIN', trained=trained, pretrained=pretrained, model_name=model_name)
-
-    add_boxes(test_dicts, my_bounding_boxes, model)
-
-    evaluator = eval.Evaluator()
-
-    results = evaluator.PlotPrecisionRecallCurve(
-        boundingBoxes=my_bounding_boxes, showGraphic=False,
-        showInterpolatedPrecision=False, showAP=True)
-
-    info = ['AP', 'total positives', 'total TP', 'total FP']
-
-    for params in info:
-        print(params + f": {results[0][params]}")
 
 
 def show_predictions(images, predictions, threshold):
@@ -109,24 +89,16 @@ def show_predictions(images, predictions, threshold):
     plt.show()  # finally, render the plot
 
 
-def show_image_examples(threshold=0.5, trained=True, pretrained=True, model_name='faster_rcnn',
-                        folder='images'):
+def show_image_examples(detector, threshold=0.5, folder='images'):
     files = os.listdir(os.path.join(WORK_PATH, 'images'))
     files.sort()
 
     images = []
     predictions = []
 
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    model = load_model(mode='ADMIN', trained=trained, pretrained=pretrained, model_name=model_name)
-
     for file in files:
         image = Image.open(os.path.join(WORK_PATH, folder, file))
-        img = test_transforms(image)
         images.append(image)
-
-        with torch.no_grad():
-            prediction = model([img.to(device)])
-            predictions.append(prediction)
+        predictions.append(detector.detect_at_one_image(image))
 
     show_predictions(images, predictions, threshold)
