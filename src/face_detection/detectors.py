@@ -1,6 +1,5 @@
-from face_detection.train_one_epoch import train_one_epoch
 from data_saver import save_nn_model
-from data_loader import load_nn_model, get_object_detection_model
+from data_loader import load_nn_model
 from face_detection.transforms import *
 from face_detection.custom_dataset import FacesDataset
 from face_detection.split_data import make_samples
