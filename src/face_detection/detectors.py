@@ -58,7 +58,7 @@ class Detector:
 
         save_nn_model(self.model.state_dict(), self.model_name, path=WORK_PATH, folder='Models')
 
-    def validate(self, val_dicts):
+    def validate(self, val_dict):
         self.model.eval()
         my_bounding_boxes = BoundingBoxes()
         add_boxes(val_dict, my_bounding_boxes, self.model)
