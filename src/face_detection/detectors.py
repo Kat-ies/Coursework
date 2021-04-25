@@ -11,6 +11,7 @@ from constants import *
 from face_detection.bounding_boxes import BoundingBoxes
 import face_detection.evaluator as eval
 from face_detection.transforms import train_transforms
+from face_detection.train_one_epoch import train_one_epoch
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.retinanet import RetinaNetHead
