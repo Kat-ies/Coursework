@@ -180,11 +180,11 @@ class ViolaJhonesDetector:
         img = np.array(image.convert("L"), 'uint8')
         boxes = self.face_cascade.detectMultiScale(img, scaleFactor=1.1, minNeighbors=5, flags=cv2.CASCADE_SCALE_IMAGE)
 
-        # converting (x, y, w, h) boxes to (x0, y0, x1, y1)
+        # converting [x, y, w, h] boxes to (x0, y0, x1, y1)
         for box in boxes:
             box[2] += box[0]
             box[3] += box[1]
-            # box = (box)
+            box = (box)
 
         scores = torch.ones(len(boxes))
         return [{'boxes': torch.tensor(boxes), 'scores': scores}]
