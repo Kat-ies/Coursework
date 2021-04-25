@@ -184,10 +184,9 @@ class ViolaJhonesDetector:
         for box in boxes:
             box[2] += box[0]
             box[3] += box[1]
-            box = (box)
 
         scores = torch.ones(len(boxes))
-        return [{'boxes': torch.tensor(boxes), 'scores': scores}]
+        return [{'boxes': torch.tensor(boxes, dtype=torch.float32), 'scores': scores}]
 
     def __repr__(self):
         return self.model
