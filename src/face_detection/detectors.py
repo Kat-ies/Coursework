@@ -18,8 +18,8 @@ from PIL import Image
 
 
 class Detector:
-
-    def __init__(self, model=None, model_name='detector', params=None, lr_scheduler=None, optimizer=None):
+    def __init__(self, model=None, model_name='detector', params=None,
+                 lr_scheduler=None, optimizer=None, pretrained=True):
         self.model = model
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.params = params
@@ -27,8 +27,9 @@ class Detector:
         # learning rate scheduler which decreases the learning rate by 10x every 3 epochs
         self.lr_scheduler = lr_scheduler
         self.model_name = model_name
+        self.pretrained = pretrained
 
-    def train(self, num_epochs=3, pretrained=True):
+    def train(self, num_epochs=3):
         # Let's fix everything that can be fixed to get the same results between runs
         torch.manual_seed(RANDOM_SEED)
         torch.cuda.manual_seed_all(RANDOM_SEED)
@@ -71,7 +72,7 @@ class Detector:
 
         print('AP' + f": {results[0]['AP']}")
 
-    def test(self, pretrained=True):
+    def test(self):
 
         my_bounding_boxes = BoundingBoxes()
 
@@ -113,7 +114,7 @@ class Detector:
 class FasterRCNNDetector(Detector):
 
     def __init__(self, trained=True, pretrained=True):
-        super().__init__(model=self.set_model(pretrained),
+        super().__init__(model=self.fine_tune_model(pretrained),
                          model_name='faster_rcnn' if pretrained else 'faster_rcnn_not_pretrained')
         self.params = [p for p in self.model.parameters() if p.requires_grad]
         self.trained = trained
@@ -121,7 +122,7 @@ class FasterRCNNDetector(Detector):
         self.optimizer = torch.optim.Adam(self.params, lr=0.0005, betas=(0.9, 0.999), weight_decay=0.0005)
         self.lr_scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=3, gamma=0.1)
 
-    def set_model(self, pretrained):
+    def fine_tune_model(self, pretrained):
         num_classes = 2
         # load an object detection model pre-trained on COCO == pretrained=True
         model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=pretrained)
@@ -133,17 +134,11 @@ class FasterRCNNDetector(Detector):
         model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
         return model
 
-    def train(self):
-        super().train(pretrained=self.pretrained)
-
-    def test(self):
-        super().test(pretrained=self.pretrained)
-
 
 class RetinaNetDetector(Detector):
 
     def __init__(self, trained=True, pretrained=True):
-        super().__init__(model=self.set_model(pretrained),
+        super().__init__(model=self.fine_tune_model(pretrained),
                          model_name='retina_net' if pretrained else 'retina_net_not_pretrained')
         self.params = [p for p in self.model.parameters() if p.requires_grad]
         self.trained = trained
@@ -151,7 +146,7 @@ class RetinaNetDetector(Detector):
         self.optimizer = torch.optim.SGD(self.params, lr=0.0005, momentum=0.9, weight_decay=0.0005)
         self.lr_scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=3, gamma=0.1)
 
-    def set_model(self, pretrained):
+    def fine_tune_model(self, pretrained):
         num_classes = 2
 
         model = torchvision.models.detection.retinanet_resnet50_fpn(pretrained=pretrained)
@@ -163,9 +158,3 @@ class RetinaNetDetector(Detector):
         # replace the pre-trained head with a new one
         model.head = RetinaNetHead(in_features, num_anchors, num_classes)
         return model
-
-    def train(self):
-        super().train(pretrained=self.pretrained)
-
-    def test(self):
-        super().test(pretrained=self.pretrained)
