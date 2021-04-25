@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 
-class MyDataset(Dataset):
+class FacesDataset(Dataset):
     def __init__(self, train_dicts, transforms=None):
         self.images = train_dicts[0]
         self.frames = train_dicts[1]

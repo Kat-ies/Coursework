@@ -2,13 +2,8 @@ from .utils_for_mAP import *
 
 
 class BoundingBox:
-    def __init__(self,
-                 imageName,
-                 classId,
-                 x,
-                 y,
-                 w,
-                 h,
+    def __init__(self, imageName, classId,
+                 x, y, w, h,
                  typeCoordinates=CoordinatesType.Absolute,
                  imgSize=None,
                  bbType=BBType.GroundTruth,
@@ -54,7 +49,7 @@ class BoundingBox:
 
         # If relative coordinates, convert to absolute values
         # For relative coords: (x,y,w,h)=(X_center/img_width , Y_center/img_height)
-        if (typeCoordinates == CoordinatesType.Relative):
+        if typeCoordinates == CoordinatesType.Relative:
             (self._x, self._y, self._w, self._h) = convertToAbsoluteValues(imgSize, (x, y, w, h))
             self._width_img = imgSize[0]
             self._height_img = imgSize[1]
@@ -146,7 +141,6 @@ class BoundingBox:
     @staticmethod
     def clone(boundingBox):
         absBB = boundingBox.getAbsoluteBoundingBox(format=BBFormat.XYWH)
-        # return (self._x,self._y,self._x2,self._y2)
         newBoundingBox = BoundingBox(
             boundingBox.getImageName(),
             boundingBox.getClassId(),

@@ -100,12 +100,10 @@ class Evaluator:
             # print("Evaluating class: %s (%d detections)" % (str(c), len(dects)))
             # Loop through detections
             for d in range(len(dects)):
-                # print('dect %s => %s' % (dects[d][0], dects[d][3],))
                 # Find ground truth image
                 gt = gts[dects[d][0]] if dects[d][0] in gts else []
                 iouMax = sys.float_info.min
                 for j in range(len(gt)):
-                    # print('Ground truth gt => %s' % (gt[j][3],))
                     iou = Evaluator.iou(dects[d][3], gt[j][3])
                     if iou > iouMax:
                         iouMax = iou
@@ -115,14 +113,11 @@ class Evaluator:
                     if det[dects[d][0]][jmax] == 0:
                         TP[d] = 1  # count as true positive
                         det[dects[d][0]][jmax] = 1  # flag as already 'seen'
-                        # print("TP")
                     else:
                         FP[d] = 1  # count as false positive
-                        # print("FP")
                 # - A detected "cat" is overlaped with a GT "cat" with IOU >= IOUThreshold.
                 else:
                     FP[d] = 1  # count as false positive
-                    # print("FP")
             # compute precision, recall and average precision
             acc_FP = np.cumsum(FP)
             acc_TP = np.cumsum(TP)
@@ -226,7 +221,6 @@ class Evaluator:
             plt.ylabel('precision')
             if showAP:
                 ap_str = "{0:.2f}%".format(average_precision * 100)
-                # ap_str = "{0:.4f}%".format(average_precision * 100)
                 plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
             else:
                 plt.title('Precision x Recall curve \nClass: %s' % str(classId))
@@ -310,7 +304,6 @@ class Evaluator:
         ap = 0
         for i in ii:
             ap = ap + np.sum((mrec[i] - mrec[i - 1]) * mpre[i])
-        # return [ap, mpre[1:len(mpre)-1], mrec[1:len(mpre)-1], ii]
         return [ap, mpre[0:len(mpre) - 1], mrec[0:len(mpre) - 1], ii]
 
     @staticmethod
