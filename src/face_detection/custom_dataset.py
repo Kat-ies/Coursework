@@ -1,8 +1,7 @@
-from PIL import Image
 import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
+from torch.utils.data import Dataset
+
 
 
 class FacesDataset(Dataset):

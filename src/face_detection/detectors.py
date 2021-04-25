@@ -16,6 +16,8 @@ import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.retinanet import RetinaNetHead
 from PIL import Image
+import cv2
+import numpy as np
 
 
 class Detector:
@@ -159,3 +161,32 @@ class RetinaNetDetector(Detector):
         # replace the pre-trained head with a new one
         model.head = RetinaNetHead(in_features, num_anchors, num_classes)
         return model
+
+
+class ViolaJhonesDetector:
+
+    def __init__(self, model_name='viola_jhones', path=PROJECT_PATH, file='haarcascade_frontalface_default.xml'):
+        self.face_cascade = cv2.CascadeClassifier(os.path.join(path, file))
+        self.model_name = model_name
+
+    # по идее можно добавить ещё test, чтобы понять, насколько этот метод лучше моих моделек
+
+    def detect_at_one_image(self, image):
+
+        if str(type(image)) != '<class \'PIL.JpegImagePlugin.JpegImageFile\'>':
+            image = Image.open(image)
+
+        img = np.array(image.convert("L"), 'uint8')
+        boxes = self.face_cascade.detectMultiScale(img, scaleFactor=1.1, minNeighbors=5, flags=cv2.CASCADE_SCALE_IMAGE)
+
+        # converting (x, y, w, h) boxes to (x0, y0, x1, y1)
+        for box in boxes:
+            box[2] += box[0]
+            box[3] += box[1]
+            # box = (box)
+
+        scores = torch.ones(len(boxes))
+        return [{'boxes': torch.tensor(boxes), 'scores': scores}]
+
+    def __repr__(self):
+        return self.model
