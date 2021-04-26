@@ -104,3 +104,5 @@ MODEL_PATH = 'face_detection'
 
 SCORE_BACKGROUND_LABEL_WIDTH = 65
 SCORE_BACKGROUND_LABEL_HEIGHT = 14
+
+LOG_LOSSES = ['loss', 'loss_classifier', 'loss_box_reg', 'loss_objectness', 'loss_rpn_box_reg']

@@ -4,7 +4,7 @@ from face_detection.transforms import *
 from face_detection.custom_dataset import FacesDataset
 from face_detection.split_data import make_samples
 from face_detection.utils import collate_fn
-from face_detection.visualization import add_boxes
+from face_detection.visualization import add_boxes, plot_train_graphic
 from torch.utils.data import DataLoader
 import torch
 from constants import *
@@ -51,16 +51,25 @@ class Detector:
             num_workers=0,
             collate_fn=collate_fn)
 
+        metric_collector = []
+
         for epoch in range(num_epochs):
             self.model.train()
-            train_one_epoch(self.model, self.optimizer,
+            metric_logger = train_one_epoch(self.model, self.optimizer,
                             train_data_loader, self.device, epoch, print_freq=100)
+            metric_collector.append(metric_logger)
             self.lr_scheduler.step()
 
-            # валидации пока нет, тк на неё не хватает памяти,
-            # даже при таких маленьких размерах выборок :(
             # self.validate(val_dicts)
 
+        losses = [[], [], [], [], []]
+
+        # "{median:.4f} ({global_avg:.4f})" - формат вывода потерь
+        for log in metric_collector:
+            for i, key in enumerate(LOG_LOSSES):
+                losses[i].append(log.meters[key].median)
+
+        plot_train_graphic(losses)
         save_nn_model(self.model.state_dict(), self.model_name, path=WORK_PATH, folder='Models')
 
     def validate(self, val_dict):

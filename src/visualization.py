@@ -9,9 +9,7 @@ plot_graphic(y_points, title)
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import random
 import numpy as np
-from PIL import ImageDraw
 from constants import *
 from data_loader import load_sample, load_dataframe
 

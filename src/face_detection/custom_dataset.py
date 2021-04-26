@@ -3,7 +3,6 @@ import torch
 from torch.utils.data import Dataset
 
 
-
 class FacesDataset(Dataset):
     def __init__(self, train_dicts, transforms=None):
         self.images = train_dicts[0]

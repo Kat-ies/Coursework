@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
 import os
 from face_detection.detectors import *
+import numpy as np
 
 
 def add_boxes(test_dicts, my_bounding_boxes, model):
@@ -96,3 +97,25 @@ def show_image_examples(detector, threshold=0.5, folder='images'):
         predictions.append(detector.detect_at_one_image(image))
 
     show_predictions(images, predictions, threshold)
+
+
+def plot_train_graphic(y_points):
+    """
+    function plot_graphic(y_points, ) plots
+    graphics for training part
+    """
+    x_points = lambda x: np.arange(0, len(y_points[x]))
+
+    plt.figure(figsize=(15, 8))
+    plt.title('losses graphic', fontsize=18, fontname='Times New Roman')
+    plt.xlabel('Epoch', fontsize=16, fontname='Times New Roman')
+    plt.ylabel('Loss', fontsize=16, fontname='Times New Roman')
+
+    plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
+    plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
+    plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
+    plt.plot(x_points(3), y_points[3], color='#ea7500', linestyle='-')
+    plt.plot(x_points(4), y_points[4], color='#015d52', linestyle='-')
+    plt.legend(LOG_LOSSES, loc='right', shadow=True, fontsize=18)
+
+    plt.show()
