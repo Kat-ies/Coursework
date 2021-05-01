@@ -58,14 +58,13 @@ Faces = namedtuple('Faces', 'img is_face filename rect')
 Rectangle = namedtuple('Rectangle', 'x y w h')
 HaarRect = namedtuple('HaarRect', 'x y w h weight')
 
-IMG_PATH = 'WIDER_train/images'
-
 # for google-drive
 PROJECT_PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
 WORK_PATH = '/content/drive/MyDrive/КУ Курсачи/Курсовая работа 2021/'
 
 DIRECTORIES = ['/content/drive/My Drive/КУ Курсачи/'
                'Курсовой проект 2020/WIDER_FACE (zip)/WIDER_train.zip']
+IMG_PATH = 'WIDER_train/images'
 
 """
 # for local system
@@ -74,6 +73,7 @@ WORK_PATH = '/home/katerinka/КУ Курсачи/Курсовая работа 2
 
 DIRECTORIES = ['/home/katerinka/КУ Курсачи/'
                'Курсовой проект 2020/WIDER_FACE (zip)/WIDER_train.zip']
+IMG_PATH = '/home/katerinka/КУ Курсачи/Курсовой проект 2020/WIDER_FACE/WIDER_train/images'
 """
 
 FEATURES_LIST = ['Haars features', 'Matrix features', 'Matrix + PCA features']
