@@ -56,7 +56,7 @@ class Detector:
         for epoch in range(num_epochs):
             self.model.train()
             metric_logger = train_one_epoch(self.model, self.optimizer,
-                            train_data_loader, self.device, epoch, print_freq=100)
+                                            train_data_loader, self.device, epoch, print_freq=100)
             metric_collector.append(metric_logger)
             self.lr_scheduler.step()
 
