@@ -33,20 +33,21 @@ class Detector:
         self.model_name = model_name
         self.pretrained = pretrained
 
-    def train(self, num_epochs=3):
+    def train(self, num_epochs=5):
         # Let's fix everything that can be fixed to get the same results between runs
         torch.manual_seed(RANDOM_SEED)
         torch.cuda.manual_seed_all(RANDOM_SEED)
         self.model.to(self.device)
+        print(self.device)
 
-        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=4000)
+        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dict_size=6000)
 
         # train_dataset = FacesDataset(load_dicts(train_dicts), transforms=train_transforms)
         train_dataset = FacesDataset(train_dicts, transforms=train_transforms)
 
         train_data_loader = DataLoader(
             train_dataset,
-            batch_size=2,
+            batch_size=3,
             shuffle=False,
             num_workers=0,
             collate_fn=collate_fn)
@@ -60,7 +61,7 @@ class Detector:
             metric_collector.append(metric_logger)
             self.lr_scheduler.step()
 
-            # self.validate(val_dicts)
+            self.validate(val_dicts)
 
         losses = [[], [], [], [], []]
 
@@ -84,6 +85,7 @@ class Detector:
             showInterpolatedPrecision=False, showAP=True)
 
         print('AP' + f": {results[0]['AP']}")
+        #print('AP', results[0]['AP'])
 
     def test(self):
 
@@ -106,7 +108,8 @@ class Detector:
         info = ['AP', 'total positives', 'total TP', 'total FP']
 
         for params in info:
-            print(params + f": {results[0][params]}")
+            #print(params + f": {results[0][params]}")
+            print(params, results[0][params])
 
     def detect_at_one_image(self, image):
         self.model.load_state_dict(load_nn_model(self.model_name, path=WORK_PATH, folder='Models'))

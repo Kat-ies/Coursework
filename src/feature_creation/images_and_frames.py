@@ -8,6 +8,7 @@ import os
 from PIL import Image
 from constants import *
 from collections import namedtuple
+import copy
 
 
 def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
@@ -27,8 +28,10 @@ def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
                 img = Image.open(os.path.join(
                     directory, cur_dir, cur_file)).convert("L")
             else:
-                img = Image.open(os.path.join(directory, cur_dir, cur_file))
+                img = copy.deepcopy(Image.open(os.path.join(directory, cur_dir, cur_file)))
+                #img = Image.open(os.path.join(directory, cur_dir, cur_file))
             list_name[cur_file] = img
+            # img.close()
             if len(list_name) == max_dict_size:
                 return list_name
     return list_name
