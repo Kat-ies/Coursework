@@ -6,7 +6,7 @@ import torch
 from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
 import os
-from face_detection.detectors import *
+#from face_detection.detectors import *
 import numpy as np
 
 
