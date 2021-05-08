@@ -40,14 +40,14 @@ class Detector:
         self.model.to(self.device)
         print(self.device)
 
-        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dictionary_size=3000)
+        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dictionary_size=2000)
 
         # train_dataset = FacesDataset(load_dicts(train_dicts), transforms=train_transforms)
         train_dataset = FacesDataset(train_dicts, transforms=train_transforms)
 
         train_data_loader = DataLoader(
             train_dataset,
-            batch_size=9,
+            batch_size=8,
             shuffle=False,
             num_workers=0,
             collate_fn=collate_fn)
