@@ -28,8 +28,8 @@ def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
                 list_name[cur_file] = Image.open(os.path.join(
                     directory, cur_dir, cur_file)).convert("L")
             else:
-                list_name[cur_file] = copy.deepcopy(Image.open(os.path.join(directory, cur_dir, cur_file)))
-                # list_name[cur_file] = Image.open(os.path.join(directory, cur_dir, cur_file))
+                # list_name[cur_file] = copy.deepcopy(Image.open(os.path.join(directory, cur_dir, cur_file)))
+                list_name[cur_file] = Image.open(os.path.join(directory, cur_dir, cur_file))
             if len(list_name) == max_dict_size:
                 return list_name
     return list_name
