@@ -20,7 +20,7 @@ class FacesDataset(Dataset):
         for rects in self.frames[dict_key]:
             boxes.append([rects.x, rects.y, rects.x + rects.w, rects.y + rects.h])
 
-        boxes = torch.as_tensor(boxes, dtype=torch.float32)
+        boxes = torch.as_tensor(boxes, dtype=torch.float16)
         labels = torch.as_tensor(labels, dtype=torch.int64)
 
         target = {"boxes": boxes, "labels": labels}
