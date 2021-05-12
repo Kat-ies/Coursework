@@ -60,8 +60,10 @@ class Detector:
                                             train_data_loader, self.device, epoch, print_freq=100)
             metric_collector.append(metric_logger)
             self.lr_scheduler.step()
+            torch.cuda.empty_cache()
 
             self.validate(val_dicts)
+            torch.cuda.empty_cache()
 
         losses = [[], [], [], [], []]
 

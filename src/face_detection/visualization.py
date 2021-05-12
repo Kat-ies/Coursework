@@ -34,6 +34,7 @@ def add_boxes(test_dicts, my_bounding_boxes, model):
 
         boxes = list(prediction[0]['boxes'].cpu().numpy())
         scores = list(prediction[0]['scores'].cpu().numpy())
+        torch.cuda.empty_cache()
 
         for i, box in enumerate(boxes):
             x, y, x2, y2 = box
@@ -106,7 +107,7 @@ def plot_train_curves(y_points):
     x_points = lambda x: np.arange(0, len(y_points[x]))
 
     plt.figure(figsize=(15, 8))
-    plt.title('losses graphic', fontsize=18, fontname='Times New Roman')
+    plt.title('loss curves', fontsize=18, fontname='Times New Roman')
     plt.xlabel('Epoch', fontsize=16, fontname='Times New Roman')
     plt.ylabel('Loss', fontsize=16, fontname='Times New Roman')
 
