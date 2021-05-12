@@ -40,7 +40,7 @@ class Detector:
         self.model.to(self.device)
         print(self.device)
 
-        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dictionary_size=2500)
+        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dictionary_size=3000)
         print('train dataset size: ', str(len(train_dicts[0])))
 
         train_dataset = FacesDataset(train_dicts, transforms=train_transforms)
