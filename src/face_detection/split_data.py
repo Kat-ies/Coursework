@@ -52,7 +52,6 @@ def make_samples(mode='TRAIN_VAL', max_dictionary_size=4000):
     try:
         # поскольку картинки и рамки я уже когда-то юзала, то можно снова взять эти функции
         dict_images = make_images_dict(is_color=True, max_dict_size=max_dictionary_size)
-        print(len(dict_images))
         dict_frames = make_frames_dict(dict_images)
 
         make_valide_dict(dict_images, dict_frames)
