@@ -47,7 +47,7 @@ class Detector:
 
         train_data_loader = DataLoader(
             train_dataset,
-            batch_size=8,
+            batch_size=2,
             shuffle=False,
             num_workers=0,
             collate_fn=collate_fn)
