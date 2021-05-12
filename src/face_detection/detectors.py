@@ -4,7 +4,7 @@ from face_detection.transforms import *
 from face_detection.custom_dataset import FacesDataset
 from face_detection.split_data import make_samples
 from face_detection.utils import collate_fn
-from face_detection.visualization import add_boxes, plot_train_graphic
+from face_detection.visualization import add_boxes, plot_train_curves
 from torch.utils.data import DataLoader
 import torch
 from constants import *
@@ -15,7 +15,7 @@ from face_detection.train_one_epoch import train_one_epoch
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.retinanet import RetinaNetHead
-from PIL import Image
+from PIL import Image, JpegImagePlugin
 import cv2
 import numpy as np
 import os
@@ -40,9 +40,9 @@ class Detector:
         self.model.to(self.device)
         print(self.device)
 
-        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dictionary_size=2000)
+        train_dicts, val_dicts = make_samples(mode='TRAIN_VAL', max_dictionary_size=2500)
+        print('train dataset size: ', str(len(train_dicts[0])))
 
-        # train_dataset = FacesDataset(load_dicts(train_dicts), transforms=train_transforms)
         train_dataset = FacesDataset(train_dicts, transforms=train_transforms)
 
         train_data_loader = DataLoader(
@@ -70,7 +70,7 @@ class Detector:
             for i, key in enumerate(LOG_LOSSES):
                 losses[i].append(log.meters[key].median)
 
-        plot_train_graphic(losses)
+        plot_train_curves(losses)
         save_nn_model(self.model.state_dict(), self.model_name, path=WORK_PATH, folder='Models')
 
     def validate(self, val_dict):
@@ -85,7 +85,6 @@ class Detector:
             showInterpolatedPrecision=False, showAP=True)
 
         print('AP' + f": {results[0]['AP']}")
-        #print('AP', results[0]['AP'])
 
     def test(self):
 
@@ -108,7 +107,6 @@ class Detector:
         info = ['AP', 'total positives', 'total TP', 'total FP']
 
         for params in info:
-            #print(params + f": {results[0][params]}")
             print(params, results[0][params])
 
     def detect_at_one_image(self, image):
@@ -116,7 +114,7 @@ class Detector:
         self.model.eval()
         self.model.to(self.device)
 
-        if str(type(image)) != '<class \'PIL.JpegImagePlugin.JpegImageFile\'>':
+        if not isinstance(image, JpegImagePlugin.JpegImageFile):
             image = Image.open(image)
 
         img = test_transforms(image)
@@ -183,10 +181,8 @@ class ViolaJhonesDetector:
         self.model_name = model_name
 
     # по идее можно добавить ещё test, чтобы понять, насколько этот метод лучше моих моделек
-
     def detect_at_one_image(self, image):
-
-        if str(type(image)) != '<class \'PIL.JpegImagePlugin.JpegImageFile\'>':
+        if not isinstance(image, JpegImagePlugin.JpegImageFile):
             image = Image.open(image)
 
         img = np.array(image.convert("L"), 'uint8')

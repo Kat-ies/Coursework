@@ -6,7 +6,6 @@ import torch
 from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
 import os
-#from face_detection.detectors import *
 import numpy as np
 
 
@@ -99,9 +98,9 @@ def show_image_examples(detector, threshold=0.5, folder='images'):
     show_predictions(images, predictions, threshold)
 
 
-def plot_train_graphic(y_points):
+def plot_train_curves(y_points):
     """
-    function plot_graphic(y_points, ) plots
+    function plot_train_curves(y_points) plots
     graphics for training part
     """
     x_points = lambda x: np.arange(0, len(y_points[x]))
