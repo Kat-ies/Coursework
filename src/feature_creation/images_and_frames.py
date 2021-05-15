@@ -8,6 +8,7 @@ import os
 from PIL import Image
 from constants import *
 from collections import namedtuple
+import copy
 
 
 def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
@@ -24,13 +25,14 @@ def make_images_dict(directory=IMG_PATH, max_dict_size=9000, is_color=False):
         list_file.sort()
         for cur_file in list_file:
             if not is_color:
-                img = Image.open(os.path.join(
+                list_name[cur_file] = Image.open(os.path.join(
                     directory, cur_dir, cur_file)).convert("L")
             else:
-                img = Image.open(os.path.join(directory, cur_dir, cur_file))
-            list_name[cur_file] = img
+                # list_name[cur_file] = copy.deepcopy(Image.open(os.path.join(directory, cur_dir, cur_file)))
+                list_name[cur_file] = Image.open(os.path.join(directory, cur_dir, cur_file))
             if len(list_name) == max_dict_size:
                 return list_name
+    return list_name
 
 
 def make_frames_dict(image_dict):

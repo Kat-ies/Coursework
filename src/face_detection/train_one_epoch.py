@@ -1,5 +1,6 @@
-from .utils import *
+from face_detection.utils import *
 import math
+import torch
 
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
@@ -23,6 +24,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
 
         losses = sum(loss for loss in loss_dict.values())
 
+        torch.cuda.empty_cache()
         # reduce losses over all GPUs for logging purposes
         loss_dict_reduced = reduce_dict(loss_dict)
         losses_reduced = sum(loss for loss in loss_dict_reduced.values())
@@ -38,6 +40,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
         optimizer.zero_grad()
         losses.backward()
         optimizer.step()
+        torch.cuda.empty_cache()
 
         if lr_scheduler is not None:
             lr_scheduler.step()

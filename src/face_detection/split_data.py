@@ -46,12 +46,12 @@ def make_valide_dict(dict_images, dict_frames):
                     del dict_images[key]
 
 
-def make_samples(mode='TRAIN_VAL', max_dict_size=4000):
+def make_samples(mode='TRAIN_VAL', max_dictionary_size=4000):
     unpacking_zips()
 
     try:
         # поскольку картинки и рамки я уже когда-то юзала, то можно снова взять эти функции
-        dict_images = make_images_dict(is_color=True, max_dict_size=max_dict_size)
+        dict_images = make_images_dict(is_color=True, max_dict_size=max_dictionary_size)
         dict_frames = make_frames_dict(dict_images)
 
         make_valide_dict(dict_images, dict_frames)

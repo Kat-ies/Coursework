@@ -17,7 +17,6 @@ import time
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-import joblib
 import os
 import random
 from constants import *
@@ -46,7 +45,7 @@ class HaarFeature:
      </features>
      """
 
-    def cacl_feature(self, cumsum_matrix):
+    def calc_feature(self, cumsum_matrix):
         f_x = 0
         for rects in self.rect_list:
             if (rects.w, rects.h) >= MAXSIZE:
@@ -112,7 +111,7 @@ def feature_creating(sample, feature_type, h_features):
             matrix = np.cumsum(np.cumsum(img, axis=0), axis=1)
             f_for_one_img = []
             for fichi in h_features:
-                f_for_one_img.append(fichi.cacl_feature(matrix))
+                f_for_one_img.append(fichi.calc_feature(matrix))
             features.append(f_for_one_img)
     return np.array(features)
 
