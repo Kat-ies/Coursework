@@ -26,7 +26,7 @@ from data_saver import save_dataframe, save_data
 
 class HaarFeature:
     def __init__(self, rect_list):
-     self.rect_list = rect_list
+        self.rect_list = rect_list
 
      """
      class HaarFeature is created for calculating the value of every feature
