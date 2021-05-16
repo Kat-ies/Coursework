@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 import os
-from face_detection.detectors import *
 
 
 def add_boxes(test_dicts, my_bounding_boxes, model):
