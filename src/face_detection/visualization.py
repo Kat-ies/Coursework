@@ -60,8 +60,12 @@ def show_predictions(images, predictions, threshold):
 
     for image, prediction in zip(images, predictions):
 
-        boxes = list(prediction[0]['boxes'].cpu().numpy())
-        scores = list(prediction[0]['scores'].cpu().numpy())
+        if isinstance(prediction[0]['boxes'], torch.Tensor):
+            boxes = list(prediction[0]['boxes'].cpu().numpy())
+            scores = list(prediction[0]['scores'].cpu().numpy())
+        else:
+            boxes = prediction[0]['boxes']
+            scores = prediction[0]['scores']
 
         ax.append(fig.add_subplot(rows, cols, i + 1))
         i += 1
