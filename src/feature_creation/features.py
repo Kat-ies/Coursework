@@ -28,23 +28,23 @@ class HaarFeature:
     def __init__(self, rect_list):
         self.rect_list = rect_list
 
-     """
-     class HaarFeature is created for calculating the value of every feature
-     each haars feature is represented by 2-3 rectangles
-     one rectangle looks like <_> x1, y1, w, h, weight </_>
-     (top left corner + width + height + weight)
-     for more details see https://api-2d3d-cad.com/viola-jones-method/
+    """
+    class HaarFeature is created for calculating the value of every feature
+    each haars feature is represented by 2-3 rectangles
+    one rectangle looks like <_> x1, y1, w, h, weight </_>
+    (top left corner + width + height + weight)
+    for more details see https://api-2d3d-cad.com/viola-jones-method/
 
-     the example from .xml file (one feature):
-     <features>
-      <_>
-           <rects>
-             <_>
-                6 4 12 9 -1.</_>
-             <_>
-                6 7 12 3 3.</_></rects></_>
-     </features>
-     """
+    the example from .xml file (one feature):
+    <features>
+     <_>
+          <rects>
+            <_>
+               6 4 12 9 -1.</_>
+            <_>
+               6 7 12 3 3.</_></rects></_>
+    </features>
+    """
 
     def calc_feature(self, cumsum_matrix):
         f_x = 0
