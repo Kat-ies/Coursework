@@ -8,7 +8,9 @@ from face_detection.visualization import add_boxes, plot_train_curves
 from torch.utils.data import DataLoader
 import torch
 from constants import *
+from face_detection.bounding_box import BoundingBox
 from face_detection.bounding_boxes import BoundingBoxes
+from face_detection.utils_for_mAP import CoordinatesType, BBType, BBFormat
 import face_detection.evaluator as eval
 from face_detection.transforms import train_transforms
 from face_detection.train_one_epoch import train_one_epoch
@@ -92,7 +94,7 @@ class Detector:
 
         my_bounding_boxes = BoundingBoxes()
 
-        test_dicts = make_samples(mode='TEST')
+        test_dicts = make_samples(mode='TEST', max_dictionary_size=3000)
 
         self.model.load_state_dict(load_nn_model(self.model_name, path=WORK_PATH, folder='Models'))
         self.model.eval()
@@ -204,7 +206,7 @@ class ViolaJhonesDetector:
     def test(self):
 
         my_bounding_boxes = BoundingBoxes()
-        test_dicts = make_samples(mode='TEST')
+        test_dicts = make_samples(mode='TEST', max_dictionary_size=3000)
 
         for key, rects in test_dicts[1].items():  # dict_frames
 
