@@ -52,10 +52,10 @@ class HaarFeature:
             if (rects.w, rects.h) >= MAXSIZE:
                 continue
             else:
-                f_x += (cumsum_matrix[rects.y - 1 + rects.h][rects.x - 1 + rects.w]
+                f_x += (int(cumsum_matrix[rects.y - 1 + rects.h][rects.x - 1 + rects.w]
                         - cumsum_matrix[rects.y - 1][rects.x - 1 + rects.w]
                         - cumsum_matrix[rects.y - 1 + rects.h][rects.x - 1]
-                        + cumsum_matrix[rects.y - 1][rects.x - 1]) * rects.weight
+                        + cumsum_matrix[rects.y - 1][rects.x - 1])) * rects.weight
         return f_x
 
 

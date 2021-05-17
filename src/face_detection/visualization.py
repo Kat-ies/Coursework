@@ -49,7 +49,7 @@ def add_boxes(test_dicts, my_bounding_boxes, model):
 
 
 def show_predictions(images, predictions, threshold):
-    fig = plt.figure(figsize=(60, 70))
+    fig = plt.figure(figsize=(50, 60))
     cols = 1
     rows = len(images)
 
