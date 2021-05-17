@@ -200,3 +200,41 @@ class ViolaJhonesDetector:
 
     def __repr__(self):
         return self.model
+
+    def test(self):
+
+        my_bounding_boxes = BoundingBoxes()
+        test_dicts = make_samples(mode='TEST')
+
+        for key, rects in test_dicts[1].items():  # dict_frames
+
+            # let's add ground_truth_boxes first
+            for rectangle in rects:
+                x, y, w, h = rectangle
+                gt_bounding_box = BoundingBox(imageName=key, classId='face', x=x, y=y,
+                                              w=w, h=h, typeCoordinates=CoordinatesType.Absolute,
+                                              bbType=BBType.GroundTruth, format=BBFormat.XYWH,
+                                              imgSize=test_dicts[0][key].size)
+                my_bounding_boxes.addBoundingBox(gt_bounding_box)
+
+            predictions = self.detect_at_one_image(test_dicts[0][key])
+            boxes = predictions[0]['boxes']
+            scores = predictions[0]['scores']
+
+            for i, box in enumerate(boxes):
+                x, y, x2, y2 = box
+                detected_bounding_box = BoundingBox(imageName=key, classId='face', classConfidence=scores[i],
+                                                    x=x, y=y, w=x2, h=y2, typeCoordinates=CoordinatesType.Absolute,
+                                                    bbType=BBType.Detected, format=BBFormat.XYX2Y2,
+                                                    imgSize=test_dicts[0][key].size)
+                my_bounding_boxes.addBoundingBox(detected_bounding_box)
+
+        evaluator = eval.Evaluator()
+        results = evaluator.PlotPrecisionRecallCurve(
+            boundingBoxes=my_bounding_boxes, showGraphic=False,
+            showInterpolatedPrecision=False, showAP=True)
+
+        info = ['AP', 'total positives', 'total TP', 'total FP']
+
+        for params in info:
+            print(params, results[0][params])
