@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 import os
-from face_detection.detectors import *
 
 
 def add_boxes(test_dicts, my_bounding_boxes, model):
@@ -50,7 +49,7 @@ def add_boxes(test_dicts, my_bounding_boxes, model):
 
 
 def show_predictions(images, predictions, threshold):
-    fig = plt.figure(figsize=(60, 70))
+    fig = plt.figure(figsize=(50, 60))
     cols = 1
     rows = len(images)
 
@@ -60,8 +59,12 @@ def show_predictions(images, predictions, threshold):
 
     for image, prediction in zip(images, predictions):
 
-        boxes = list(prediction[0]['boxes'].cpu().numpy())
-        scores = list(prediction[0]['scores'].cpu().numpy())
+        if isinstance(prediction[0]['boxes'], torch.Tensor):
+            boxes = list(prediction[0]['boxes'].cpu().numpy())
+            scores = list(prediction[0]['scores'].cpu().numpy())
+        else:
+            boxes = prediction[0]['boxes']
+            scores = prediction[0]['scores']
 
         ax.append(fig.add_subplot(rows, cols, i + 1))
         i += 1

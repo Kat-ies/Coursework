@@ -26,36 +26,36 @@ from data_saver import save_dataframe, save_data
 
 class HaarFeature:
     def __init__(self, rect_list):
-     self.rect_list = rect_list
+        self.rect_list = rect_list
 
-     """
-     class HaarFeature is created for calculating the value of every feature
-     each haars feature is represented by 2-3 rectangles
-     one rectangle looks like <_> x1, y1, w, h, weight </_>
-     (top left corner + width + height + weight)
-     for more details see https://api-2d3d-cad.com/viola-jones-method/
+    """
+    class HaarFeature is created for calculating the value of every feature
+    each haars feature is represented by 2-3 rectangles
+    one rectangle looks like <_> x1, y1, w, h, weight </_>
+    (top left corner + width + height + weight)
+    for more details see https://api-2d3d-cad.com/viola-jones-method/
 
-     the example from .xml file (one feature):
-     <features>
-      <_>
-           <rects>
-             <_>
-                6 4 12 9 -1.</_>
-             <_>
-                6 7 12 3 3.</_></rects></_>
-     </features>
-     """
+    the example from .xml file (one feature):
+    <features>
+     <_>
+          <rects>
+            <_>
+               6 4 12 9 -1.</_>
+            <_>
+               6 7 12 3 3.</_></rects></_>
+    </features>
+    """
 
-    def cacl_feature(self, cumsum_matrix):
+    def calc_feature(self, cumsum_matrix):
         f_x = 0
         for rects in self.rect_list:
             if (rects.w, rects.h) >= MAXSIZE:
                 continue
             else:
-                f_x += (cumsum_matrix[rects.y - 1 + rects.h][rects.x - 1 + rects.w]
+                f_x += (int(cumsum_matrix[rects.y - 1 + rects.h][rects.x - 1 + rects.w]
                         - cumsum_matrix[rects.y - 1][rects.x - 1 + rects.w]
                         - cumsum_matrix[rects.y - 1 + rects.h][rects.x - 1]
-                        + cumsum_matrix[rects.y - 1][rects.x - 1]) * rects.weight
+                        + cumsum_matrix[rects.y - 1][rects.x - 1])) * rects.weight
         return f_x
 
 
@@ -112,7 +112,7 @@ def feature_creating(sample, feature_type, h_features):
             matrix = np.cumsum(np.cumsum(img, axis=0), axis=1)
             f_for_one_img = []
             for fichi in h_features:
-                f_for_one_img.append(fichi.cacl_feature(matrix))
+                f_for_one_img.append(fichi.calc_feature(matrix))
             features.append(f_for_one_img)
     return np.array(features)
 
