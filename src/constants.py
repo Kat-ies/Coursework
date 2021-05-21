@@ -58,7 +58,6 @@ Faces = namedtuple('Faces', 'img is_face filename rect')
 Rectangle = namedtuple('Rectangle', 'x y w h')
 HaarRect = namedtuple('HaarRect', 'x y w h weight')
 
-
 # for google-drive
 PROJECT_PATH = '/content/drive/My Drive/КУ Курсачи/Курсовой проект 2020/files/'
 WORK_PATH = '/content/drive/MyDrive/КУ Курсачи/Курсовая работа 2021/'
@@ -108,4 +107,5 @@ MODEL_PATH = 'face_detection'
 SCORE_BACKGROUND_LABEL_WIDTH = 65
 SCORE_BACKGROUND_LABEL_HEIGHT = 14
 
-LOG_LOSSES = ['loss', 'loss_classifier', 'loss_box_reg', 'loss_objectness', 'loss_rpn_box_reg']
+FASTER_LOG_LOSSES = ['loss', 'loss_classifier', 'loss_box_reg', 'loss_objectness', 'loss_rpn_box_reg']
+RETINA_LOG_LOSSES = ['loss', 'classification', 'bbox_regression']

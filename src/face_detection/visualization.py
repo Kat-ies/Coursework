@@ -99,7 +99,7 @@ def show_image_examples(detector, threshold=0.5, folder='images'):
     show_predictions(images, predictions, threshold)
 
 
-def plot_train_curves(y_points):
+def plot_train_curves(y_points, model_name):
     """
     function plot_train_curves(y_points) plots
     graphics for training part
@@ -111,11 +111,22 @@ def plot_train_curves(y_points):
     plt.xlabel('Epoch', fontsize=16, fontname='Times New Roman')
     plt.ylabel('Loss', fontsize=16, fontname='Times New Roman')
 
-    plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
-    plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
-    plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
-    plt.plot(x_points(3), y_points[3], color='#ea7500', linestyle='-')
-    plt.plot(x_points(4), y_points[4], color='#015d52', linestyle='-')
-    plt.legend(LOG_LOSSES, loc='right', shadow=True, fontsize=18)
-
+    try:
+        if model_name == 'faster_rcnn':
+            plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
+            plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
+            plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
+            plt.plot(x_points(3), y_points[3], color='#ea7500', linestyle='-')
+            plt.plot(x_points(4), y_points[4], color='#015d52', linestyle='-')
+            plt.legend(FASTER_LOG_LOSSES, loc='right', shadow=True, fontsize=18)
+        if model_name == 'retina_net':
+            plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
+            plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
+            plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
+            plt.legend(FASTER_LOG_LOSSES, loc='right', shadow=True, fontsize=18)
+        else:
+            raise RuntimeError('Unknown model type!')
+    except RuntimeError as re:
+        print(*re.args)
+        return
     plt.show()
