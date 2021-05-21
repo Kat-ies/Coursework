@@ -67,14 +67,23 @@ class Detector:
             self.validate(val_dicts)
             torch.cuda.empty_cache()
 
-        losses = [[], [], [], [], []]
+        if self.model_name == 'faster_rcnn':
+            losses = [[], [], [], [], []]
 
-        # "{median:.4f} ({global_avg:.4f})" - формат вывода потерь
-        for log in metric_collector:
-            for i, key in enumerate(LOG_LOSSES):
-                losses[i].append(log.meters[key].median)
+            # "{median:.4f} ({global_avg:.4f})" - формат вывода потерь
+            for log in metric_collector:
+                for i, key in enumerate(FASTER_LOG_LOSSES):
+                    losses[i].append(log.meters[key].median)
 
-        plot_train_curves(losses)
+        if self.model_name == 'retina_net':
+            losses = [[], [], []]
+
+            # "{median:.4f} ({global_avg:.4f})" - формат вывода потерь
+            for log in metric_collector:
+                for i, key in enumerate(RETINA_LOG_LOSSES):
+                    losses[i].append(log.meters[key].median)
+
+        plot_train_curves(losses, self.model_name)
         save_nn_model(self.model.state_dict(), self.model_name, path=WORK_PATH, folder='Models')
 
     def validate(self, val_dict):

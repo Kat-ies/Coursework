@@ -123,7 +123,7 @@ def plot_train_curves(y_points, model_name):
             plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
             plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
             plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
-            plt.legend(FASTER_LOG_LOSSES, loc='right', shadow=True, fontsize=18)
+            plt.legend(RETINA_LOG_LOSSES, loc='right', shadow=True, fontsize=18)
         else:
             raise RuntimeError('Unknown model type!')
     except RuntimeError as re:
