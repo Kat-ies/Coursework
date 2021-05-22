@@ -67,7 +67,8 @@ class Detector:
             self.validate(val_dicts)
             torch.cuda.empty_cache()
 
-        if self.model_name == 'faster_rcnn':
+        if self.model_name == 'faster_rcnn' or \
+                self.model_name == 'faster_rcnn_not_pretrained':
             losses = [[], [], [], [], []]
 
             # "{median:.4f} ({global_avg:.4f})" - формат вывода потерь
@@ -75,7 +76,8 @@ class Detector:
                 for i, key in enumerate(FASTER_LOG_LOSSES):
                     losses[i].append(log.meters[key].median)
 
-        if self.model_name == 'retina_net':
+        if self.model_name == 'retina_net' or \
+                self.model_name == 'retina_net_not_pretrained':
             losses = [[], [], []]
 
             # "{median:.4f} ({global_avg:.4f})" - формат вывода потерь
