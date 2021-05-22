@@ -112,16 +112,16 @@ def plot_train_curves(y_points, model_name):
     plt.ylabel('Loss', fontsize=16, fontname='Times New Roman')
 
     try:
-        if self.model_name == 'faster_rcnn' or \
-                self.model_name == 'faster_rcnn_not_pretrained':
+        if model_name == 'faster_rcnn' or \
+                model_name == 'faster_rcnn_not_pretrained':
             plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
             plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
             plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
             plt.plot(x_points(3), y_points[3], color='#ea7500', linestyle='-')
             plt.plot(x_points(4), y_points[4], color='#015d52', linestyle='-')
             plt.legend(FASTER_LOG_LOSSES, loc='right', shadow=True, fontsize=18)
-        if self.model_name == 'retina_net' or \
-                self.model_name == 'retina_net_not_pretrained':
+        if model_name == 'retina_net' or \
+                model_name == 'retina_net_not_pretrained':
             plt.plot(x_points(0), y_points[0], color='#fb607f', linestyle='-')
             plt.plot(x_points(1), y_points[1], color='#906bff', linestyle='-')
             plt.plot(x_points(2), y_points[2], color='#c71585', linestyle='-')
